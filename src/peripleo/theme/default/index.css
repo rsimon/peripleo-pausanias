@@ -1,0 +1,24 @@
+:root {
+  --p6o-control-bg: #fafafa;
+  --p6o-control-border: 1px solid rgba(0,0,0,.28);
+  --p6o-control-shadow: 0 0 8px rgba(0,0,0,.35);
+
+  --p6o-flex-gap: 8px;
+}
+
+.p6o-control {
+  pointer-events: auto;
+}
+
+.p6o-control-btn {
+  align-items: center;
+  background-color: var(--p6o-control-bg);
+  border-radius: 50%;
+  border: var(--p6o-control-border);
+  box-shadow: var(--p6o-control-shadow);
+  cursor: pointer;
+  display: flex;
+  height: 40px;
+  justify-content: center;
+  width: 40px;
+}

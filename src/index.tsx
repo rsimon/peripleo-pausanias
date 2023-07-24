@@ -2,6 +2,8 @@ import { createRoot } from 'react-dom/client';
 import { Peripleo, Controls } from './peripleo';
 import { Map, Zoom } from './peripleo/maplibre';
 
+import './peripleo/theme/default/index.css';
+
 export const App = () => {
 
   const MAP_STYLE = document.querySelector('meta[name="map.style"]')?.getAttribute('content');
@@ -17,7 +19,6 @@ export const App = () => {
             <Zoom />
           </Controls.TopRight>
         </Controls.Container>
-        <Zoom />
       </Map>
     </Peripleo>
   )
