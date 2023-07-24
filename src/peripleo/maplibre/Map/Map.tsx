@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Map as MapLibre, MapMouseEvent, PointLike } from 'maplibre-gl';
 import { MapContext } from './MapContext';
 import { MapProps } from './MapProps';
-import { PopupContainer } from '../Popup';
+import { PopupContainer } from '../popup';
 import { useSelectionState } from '../../state';
 
 import 'maplibre-gl/dist/maplibre-gl.css';

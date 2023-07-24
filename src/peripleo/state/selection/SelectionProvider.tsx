@@ -1,20 +1,19 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
-import { MapGeoJSONFeature } from 'maplibre-gl';
 import { useSearch } from '../search';
 
 export type SelectionContextState = [
 
-  MapGeoJSONFeature | null,
+  any | null,
 
-  (selection: MapGeoJSONFeature | null) => void
+  (selection: any | null) => void
 
 ]
 
 export const SelectionContext = createContext<SelectionContextState>([null, null]);
 
-export const SelectionProvider = (props: { children: ReactNode }) => {
+export const SelectionProvider = <T extends any>(props: { children: ReactNode }) => {
 
-  const [selection, setSelection] = useState<MapGeoJSONFeature | null>(null);
+  const [selection, setSelection] = useState<T | null>(null);
 
   const { search } = useSearch();
 
@@ -31,9 +30,11 @@ export const SelectionProvider = (props: { children: ReactNode }) => {
 
 }
 
-export const useSelectionState = () => useContext(SelectionContext);
+export const useSelectionState = <T extends any>() => {
+  return useContext(SelectionContext) as [T, (selection: T) => void];
+}
 
-export const useSelectionValue = () => {
+export const useSelectionValue = <T extends any>() => {
   const [ selection, ] = useContext(SelectionContext);
-  return selection;
+  return selection as T;
 }
