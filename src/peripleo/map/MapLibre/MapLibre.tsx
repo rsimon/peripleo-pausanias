@@ -1,0 +1,75 @@
+import { useEffect, useRef, useState } from 'react';
+import { Map, MapMouseEvent, PointLike } from 'maplibre-gl';
+import { MapContext, MapProps } from '../Map';
+import { PopupContainer } from '../../popup';
+import { useSelectionState } from '../../state';
+
+const CLICK_THRESHOLD = 10;
+
+export const MapLibre = (props: MapProps) => {
+
+  const ref = useRef<HTMLDivElement>(null);
+
+  const [map, setMap] = useState<Map>(null);
+
+  const [selected, setSelected] = useSelectionState();
+
+  const onMapClicked = (evt: MapMouseEvent) => {
+    const map = evt.target;
+
+    const bbox: [PointLike, PointLike] = [
+      [evt.point.x - CLICK_THRESHOLD, evt.point.y - CLICK_THRESHOLD],
+      [evt.point.x + CLICK_THRESHOLD, evt.point.y + CLICK_THRESHOLD]
+    ];
+
+    const features = map.queryRenderedFeatures(bbox)
+      // @ts-ignore
+      .filter(feature => feature.layer.metadata?.interactive);
+
+    if (features.length > 0)
+      // TODO pick feature with smallest area?
+      setSelected(features[0]);
+    else 
+      setSelected(null);
+  };
+
+  useEffect(() => {
+    const map = new Map({
+      container: ref.current,
+      style: props.style,
+      bounds: props.defaultBounds
+    });
+
+    if (props.disableScrollZoom)
+      map.scrollZoom.disable();
+
+    map.on('click', onMapClicked);
+
+    setMap(map);
+
+    return () => map.remove();
+  }, []);
+
+  return (
+    <div 
+      ref={ref}
+      className="p6o-map-container">
+      <MapContext.Provider value={map}>
+        {map && (
+          <>
+            {props.children}
+
+            {props.popup && (
+              <PopupContainer 
+                map={map}
+                selected={selected}
+                popup={props.popup} 
+                onClose={() => setSelected(null)} />
+            )}
+          </>
+        )}
+      </MapContext.Provider>
+    </div>
+  )
+
+}

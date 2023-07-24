@@ -1,0 +1,4 @@
+.p6o-popup-container {
+  pointer-events: none;
+  position: absolute;
+}

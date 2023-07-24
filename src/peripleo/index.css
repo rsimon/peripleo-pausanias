@@ -1,0 +1,45 @@
+@import url('https://unpkg.com/maplibre-gl@2.4.0/dist/maplibre-gl.css');
+
+:root {
+  --p6o-control-bg: #fafafa;
+  --p6o-control-bg-hover: #fff;
+  --p6o-control-border: 1px solid rgba(0, 0, 0, 0.2);
+  --p6o-control-shadow: 0 0 6px rgba(0, 0, 0, 0.18);
+}
+
+.controls {
+  position: absolute;
+  right: 20px;
+  top: 20px;
+}
+
+.controls.left {
+  left: 20px;
+}
+
+.p6o-map-container {
+  width: 100%;
+  height: 100%;
+}
+
+.p6o-control {
+  align-items: center;
+  background-color: var(--p6o-control-bg);
+  border: var(--p6o-control-border);
+  border-radius: 50%;
+  box-shadow: var(--p6o-control-shadow);
+  cursor: pointer;
+  display: flex;
+  height: 64px;
+  justify-content: center;
+  margin-bottom: 12px;
+  width: 64px;
+}
+
+.p6o-control svg {
+  font-size: 32px;
+}
+
+.p6o-controls button:hover {
+  background-color: var(--p6o-control-bg-hover);
+}
