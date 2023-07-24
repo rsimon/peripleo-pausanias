@@ -1,8 +1,6 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import { PopupProps } from './PopupProps';
-import { moveIntoView } from '../map';
-
-import './PopupContainer.css';
+import { moveIntoView } from './moveIntoView';
 
 export type PopupContainerProps = PopupProps & {
 

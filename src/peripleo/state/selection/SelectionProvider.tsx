@@ -1,4 +1,4 @@
-import { ReactElement, createContext, useContext, useEffect, useState } from 'react';
+import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { MapGeoJSONFeature } from 'maplibre-gl';
 import { useSearch } from '../search';
 
@@ -12,7 +12,7 @@ export type SelectionContextState = [
 
 export const SelectionContext = createContext<SelectionContextState>([null, null]);
 
-export const SelectionProvider = (props: { children: ReactElement}) => {
+export const SelectionProvider = (props: { children: ReactNode }) => {
 
   const [selection, setSelection] = useState<MapGeoJSONFeature | null>(null);
 

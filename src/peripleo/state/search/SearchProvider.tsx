@@ -1,4 +1,4 @@
-import { ReactElement, createContext, useContext, useState } from 'react';
+import { ReactNode, createContext, useState } from 'react';
 import { SearchState, SearchStatus } from './SearchTypes';
 
 const EMPTY = { args: {}, status: SearchStatus.PENDING };
@@ -13,7 +13,7 @@ interface SearchContextValue<T extends { id: string } = { id: string }>{
 
 export const SearchContext = createContext<SearchContextValue>({ search: EMPTY, setSearch: null });
 
-export const SearchProvider = <T extends { id: string}>(props: { children: ReactElement}) => {
+export const SearchProvider = <T extends { id: string}>(props: { children: ReactNode }) => {
 
   const [search, setSearch]  = useState<SearchState<T>>(EMPTY);
 

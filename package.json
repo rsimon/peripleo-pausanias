@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "author": "Rainer Simon",
+  "type": "module",
   "license": "BSD-3-Clause",
   "scripts": {
     "start": "vite",
@@ -17,7 +18,7 @@
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.0.8",
-    "maplibre-gl": "^2.4.0",
+    "maplibre-gl": "^3.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

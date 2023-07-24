@@ -1,16 +1,19 @@
 import { useEffect, useRef, useState } from 'react';
-import { Map, MapMouseEvent, PointLike } from 'maplibre-gl';
-import { MapContext, MapProps } from '../Map';
-import { PopupContainer } from '../../popup';
+import { Map as MapLibre, MapMouseEvent, PointLike } from 'maplibre-gl';
+import { MapContext } from './MapContext';
+import { MapProps } from './MapProps';
+import { PopupContainer } from '../Popup';
 import { useSelectionState } from '../../state';
+
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 const CLICK_THRESHOLD = 10;
 
-export const MapLibre = (props: MapProps) => {
+export const Map = (props: MapProps) => {
 
   const ref = useRef<HTMLDivElement>(null);
 
-  const [map, setMap] = useState<Map>(null);
+  const [map, setMap] = useState<MapLibre>(null);
 
   const [selected, setSelected] = useSelectionState();
 
@@ -34,7 +37,7 @@ export const MapLibre = (props: MapProps) => {
   };
 
   useEffect(() => {
-    const map = new Map({
+    const map = new MapLibre({
       container: ref.current,
       style: props.style,
       bounds: props.defaultBounds
@@ -54,6 +57,7 @@ export const MapLibre = (props: MapProps) => {
     <div 
       ref={ref}
       className="p6o-map-container">
+
       <MapContext.Provider value={map}>
         {map && (
           <>
@@ -69,6 +73,7 @@ export const MapLibre = (props: MapProps) => {
           </>
         )}
       </MapContext.Provider>
+
     </div>
   )
 
