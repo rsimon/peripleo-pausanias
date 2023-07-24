@@ -1,4 +1,4 @@
-import { ReactElement, createContext, useContext } from 'react';
+import { ReactNode, createContext, useContext } from 'react';
 import { MapLibre } from './MapLibre';
 import { Map as map } from 'maplibre-gl';
 import { PopupProps } from '../popup';
@@ -9,11 +9,11 @@ export interface MapProps {
   
   defaultBounds: [[number, number], [number, number]];
 
-  children: ReactElement | ReactElement[] | never[];
+  children?: ReactNode;
 
   disableScrollZoom?: boolean;
 
-  popup?(props: PopupProps): ReactElement;
+  popup?(props: PopupProps): ReactNode;
 
 }
 

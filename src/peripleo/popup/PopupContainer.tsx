@@ -1,13 +1,12 @@
-import { ReactElement, useEffect, useRef } from 'react';
+import { ReactNode, useEffect, useRef } from 'react';
 import { PopupProps } from './PopupProps';
 import { moveIntoView } from '../map';
 
 import './PopupContainer.css';
-import { useSearch } from '../state';
 
 export type PopupContainerProps = PopupProps & {
 
-  popup(props: PopupProps): ReactElement;
+  popup(props: PopupProps): ReactNode;
 
 }
 
