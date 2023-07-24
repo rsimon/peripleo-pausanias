@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { Peripleo } from './peripleo';
-import { Map } from './peripleo/maplibre';
+import { Map, Zoom } from './peripleo/maplibre';
 
 export const App = () => {
 
@@ -10,7 +10,9 @@ export const App = () => {
     <Peripleo>
       <Map 
         style={MAP_STYLE} 
-        defaultBounds={[[14.3, 47.5], [17.1, 49.2]]} />
+        defaultBounds={[[14.3, 47.5], [17.1, 49.2]]}>
+        <Zoom />
+      </Map>
     </Peripleo>
   )
 
