@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { Peripleo, Controls, DraggablePanel } from './peripleo';
 import { Map, Zoom } from './peripleo/maplibre';
+import { TEI } from './pausanias';
 
 import './peripleo/theme/default/index.css';
 
@@ -19,7 +20,7 @@ export const App = () => {
         </Controls>
 
         <DraggablePanel>
-          <div>Hello World!</div>
+          <TEI src="sample.tei.xml" />
         </DraggablePanel>
       </Map>
     </Peripleo>
