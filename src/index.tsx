@@ -19,7 +19,7 @@ export const App = () => {
         </Controls>
 
         <DraggablePanel>
-          
+          <div>Hello World!</div>
         </DraggablePanel>
       </Map>
     </Peripleo>
