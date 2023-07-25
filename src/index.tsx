@@ -11,7 +11,6 @@ export const App = () => {
   const MAP_STYLE = document.querySelector('meta[name="map.style"]')?.getAttribute('content');
 
   return (
-
     <Peripleo>
       <LocalStore
         places={[]}
