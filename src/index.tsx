@@ -4,6 +4,7 @@ import { Map, Zoom } from './peripleo/maplibre';
 import { TEI } from './peripleo-ext';
 
 import './peripleo/theme/default/index.css';
+import './pausanias/index.css';
 
 export const App = () => {
 
