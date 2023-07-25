@@ -15,18 +15,16 @@ export const Zoom = () => {
     <div className="p6o-zoom">
       <button 
         className="p6o-control p6o-control-btn p6o-zoom-in"
-        tabIndex={31}
         aria-label="Zoom in"
         onClick={onZoom(1)}>
-        <Plus />
+        <Plus size={20} />
       </button>
 
       <button 
         className="p6o-control p6o-control-btn p6o-zoom-out"
-        tabIndex={32}
         aria-label="Zoom out"
         onClick={onZoom(-1)}>
-        <Minus />
+        <Minus size={20} />
       </button>
     </div>
   )

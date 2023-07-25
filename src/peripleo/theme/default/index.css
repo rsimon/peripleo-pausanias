@@ -1,12 +1,20 @@
 :root {
+  --p6o-text-color: #303030;
+
   --p6o-control-bg: #fafafa;
+  --p6o-control-bg-hover: #fff;
   --p6o-control-border: 1px solid rgba(0,0,0,.28);
   --p6o-control-shadow: 0 0 8px rgba(0,0,0,.35);
 
   --p6o-flex-gap: 8px;
 }
 
+.p6o-controls-container {
+  padding: 20px;
+}
+
 .p6o-control {
+  color: var(--p6o-text-color);
   pointer-events: auto;
 }
 
@@ -20,5 +28,10 @@
   display: flex;
   height: 40px;
   justify-content: center;
+  transition: all 150ms;
   width: 40px;
+}
+
+.p6o-control-btn:hover {
+  background-color: var(--p6o-control-bg-hover);
 }

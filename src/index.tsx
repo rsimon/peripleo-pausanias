@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { Peripleo, Controls } from './peripleo';
+import { Peripleo, Controls, DraggablePanel } from './peripleo';
 import { Map, Zoom } from './peripleo/maplibre';
 
 import './peripleo/theme/default/index.css';
@@ -14,11 +14,13 @@ export const App = () => {
         style={MAP_STYLE} 
         defaultBounds={[[14.3, 47.5], [17.1, 49.2]]}>
         
-        <Controls.Container>
-          <Controls.TopRight>
-            <Zoom />
-          </Controls.TopRight>
-        </Controls.Container>
+        <Controls position="topright">
+          <Zoom />
+        </Controls>
+
+        <DraggablePanel>
+          
+        </DraggablePanel>
       </Map>
     </Peripleo>
   )
