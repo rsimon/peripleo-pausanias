@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { Map as MapLibre, MapMouseEvent, PointLike } from 'maplibre-gl';
+import { MapGeoJSONFeature, Map as MapLibre, MapMouseEvent, PointLike } from 'maplibre-gl';
 import { MapContext } from './MapContext';
 import { MapProps } from './MapProps';
-import { PopupContainer } from '../popup';
+import { PopupContainer } from '../Popup';
 import { useSelectionState } from '../../state';
 
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -15,7 +15,7 @@ export const Map = (props: MapProps) => {
 
   const [map, setMap] = useState<MapLibre>(null);
 
-  const [selected, setSelected] = useSelectionState();
+  const [selected, setSelected] = useSelectionState<MapGeoJSONFeature>();
 
   const onMapClicked = (evt: MapMouseEvent) => {
     const map = evt.target;

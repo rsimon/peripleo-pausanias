@@ -1,3 +1,3 @@
-export * from './controls';
-export * from './map';
-export * from './popup';
+export * from './Controls';
+export * from './Map';
+export * from './Popup';
