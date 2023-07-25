@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { Peripleo, Controls, DraggablePanel, LocalStore } from './peripleo';
+import { Peripleo, Controls, DraggablePanel, BrowserStore } from './peripleo';
 import { Map, Zoom } from './peripleo/maplibre';
 import { TEI } from './peripleo-ext';
 
@@ -12,7 +12,7 @@ export const App = () => {
 
   return (
     <Peripleo>
-      <LocalStore
+      <BrowserStore
         places={[]}
         traces={[]}>
         <Map 
@@ -27,7 +27,7 @@ export const App = () => {
             <TEI src="sample.tei.xml" />
           </DraggablePanel>
         </Map>
-      </LocalStore>
+      </BrowserStore>
     </Peripleo>
   )
 

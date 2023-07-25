@@ -1,10 +1,10 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { Place, Trace, WithId, Store } from '../../Types';
-import { createLocalStore } from './createLocalStore';
+import { createLocalStore } from './createBrowserStore';
 
-const LocalStoreContext = createContext<Store<WithId>>(null);
+const BrowserStoreContext = createContext<Store<WithId>>(null);
 
-interface LocalStoreProps<T extends WithId> {
+interface BrowserStoreProps<T extends WithId> {
 
   children: ReactNode;
 
@@ -14,7 +14,7 @@ interface LocalStoreProps<T extends WithId> {
 
 }
 
-export const LocalStore = <T extends WithId>(props: LocalStoreProps<T>) => {
+export const BrowserStore = <T extends WithId>(props: BrowserStoreProps<T>) => {
 
   const { places, traces } = props;
 
@@ -25,11 +25,11 @@ export const LocalStore = <T extends WithId>(props: LocalStoreProps<T>) => {
   }, [places, traces]); 
 
   return ( 
-    <LocalStoreContext.Provider value={store}>
+    <BrowserStoreContext.Provider value={store}>
       {props.children}
-    </LocalStoreContext.Provider>
+    </BrowserStoreContext.Provider>
   )
 
 }
 
-export const useStore = <T extends WithId>() => useContext(LocalStoreContext) as Store<T>;
+export const useStore = <T extends WithId>() => useContext(BrowserStoreContext) as Store<T>;
