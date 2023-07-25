@@ -18,11 +18,15 @@ export const BrowserStore = <T extends WithId>(props: BrowserStoreProps<T>) => {
 
   const { places, traces } = props;
 
-  const [store, _] = useState<Store<T>>(createLocalStore());
+  const [store, setStore] = useState<Store<T>>(null);
 
   useEffect(() => {
-    store.setData(places, traces);
-  }, [places, traces]); 
+    if (!store) {
+      const s = createLocalStore<T>();
+      s.setData(places, traces);
+      setStore(s);
+    }
+  }, [places, traces, store]); 
 
   return ( 
     <BrowserStoreContext.Provider value={store}>
