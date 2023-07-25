@@ -1,8 +1,6 @@
-import { Place } from '../Place';
-import { Store } from '../Store';
-import { Item, Trace } from '../Trace';
+import { Item, Place, Trace, Store, WithId } from '../../Types';
 
-export const createLocalStore = <T extends unknown>(): Store<T> => {
+export const createLocalStore = <T extends WithId>(): Store<T> => {
 
   const allItems = (): Item<T>[] => null;
 

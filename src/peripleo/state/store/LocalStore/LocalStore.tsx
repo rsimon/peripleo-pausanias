@@ -1,12 +1,10 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
-import { Place } from '../Place';
-import { Store } from '../Store';
-import { Trace } from '../Trace';
+import { Place, Trace, WithId, Store } from '../../Types';
 import { createLocalStore } from './createLocalStore';
 
-const LocalStoreContext = createContext<Store<unknown>>(null);
+const LocalStoreContext = createContext<Store<WithId>>(null);
 
-interface LocalStoreProps<T extends unknown> {
+interface LocalStoreProps<T extends WithId> {
 
   children: ReactNode;
 
@@ -16,7 +14,7 @@ interface LocalStoreProps<T extends unknown> {
 
 }
 
-export const LocalStore = <T extends unknown>(props: LocalStoreProps<T>) => {
+export const LocalStore = <T extends WithId>(props: LocalStoreProps<T>) => {
 
   const { places, traces } = props;
 
@@ -34,4 +32,4 @@ export const LocalStore = <T extends unknown>(props: LocalStoreProps<T>) => {
 
 }
 
-export const useStore = () => useContext(LocalStoreContext);
+export const useStore = <T extends WithId>() => useContext(LocalStoreContext) as Store<T>;

@@ -1,4 +1,6 @@
-export interface SearchState<T extends { id: string }> {
+import { WithId } from '../Types';
+
+export interface SearchState<T extends WithId> {
   
   args: SearchArgs;
   
@@ -38,7 +40,7 @@ export enum SearchStatus {
 
 }
 
-export interface SearchResult<T extends { id: string }> {
+export interface SearchResult<T extends WithId> {
 
   total: number,
 
@@ -62,4 +64,4 @@ export interface SearchResult<T extends { id: string }> {
 
 }
 
-export type ResultItem<T extends { id: string; }> = T;
+export type ResultItem<T extends WithId> = T;
