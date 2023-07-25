@@ -1,11 +1,11 @@
 import { Place } from './Place';
 import { Trace, Item } from './Trace';
 
-export interface Store<T extends any> {
+export interface Store<T extends unknown> {
 
   allItems(): Item<T>[];
 
-  allPlaces(): Place;
+  allPlaces(): Place[];
 
   allTraces(): Trace<T>[];
 
@@ -18,5 +18,7 @@ export interface Store<T extends any> {
   minItemsPerPlace: number;
 
   maxItemsPerPlace: number;
+
+  setData(places: Place[], traces: Trace<T>[], keepExisting?: boolean): void;
 
 }

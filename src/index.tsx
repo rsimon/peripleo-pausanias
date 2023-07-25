@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { Peripleo, Controls, DraggablePanel } from './peripleo';
+import { Peripleo, Controls, DraggablePanel, LocalStore } from './peripleo';
 import { Map, Zoom } from './peripleo/maplibre';
 import { TEI } from './peripleo-ext';
 
@@ -11,19 +11,24 @@ export const App = () => {
   const MAP_STYLE = document.querySelector('meta[name="map.style"]')?.getAttribute('content');
 
   return (
-    <Peripleo>
-      <Map 
-        style={MAP_STYLE} 
-        defaultBounds={[[14.3, 47.5], [17.1, 49.2]]}>
-        
-        <Controls position="topright">
-          <Zoom />
-        </Controls>
 
-        <DraggablePanel>
-          <TEI src="sample.tei.xml" />
-        </DraggablePanel>
-      </Map>
+    <Peripleo>
+      <LocalStore
+        places={[]}
+        traces={[]}>
+        <Map 
+          style={MAP_STYLE} 
+          defaultBounds={[[14.3, 47.5], [17.1, 49.2]]}>
+          
+          <Controls position="topright">
+            <Zoom />
+          </Controls>
+
+          <DraggablePanel>
+            <TEI src="sample.tei.xml" />
+          </DraggablePanel>
+        </Map>
+      </LocalStore>
     </Peripleo>
   )
 
