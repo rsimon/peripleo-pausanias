@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import { Peripleo, Controls, DraggablePanel } from './peripleo';
 import { Map, Zoom } from './peripleo/maplibre';
-import { TEI } from './pausanias';
+import { TEI } from './peripleo-ext';
 
 import './peripleo/theme/default/index.css';
 

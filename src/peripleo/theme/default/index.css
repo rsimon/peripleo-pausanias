@@ -1,5 +1,5 @@
 :root {
-  --p6o-text-color: #303030;
+  --p6o-border-radius: 4px;
 
   --p6o-control-bg: #fafafa;
   --p6o-control-bg-hover: #fff;
@@ -7,6 +7,8 @@
   --p6o-control-shadow: 0 0 8px rgba(0,0,0,.35);
 
   --p6o-flex-gap: 8px;
+
+  --p6o-text-color: #303030;
 }
 
 .p6o-controls-container {
@@ -34,4 +36,11 @@
 
 .p6o-control-btn:hover {
   background-color: var(--p6o-control-bg-hover);
+}
+
+.p6o-draggable-panel {
+  background-color: var(--p6o-control-bg);
+  border-radius: var(--p6o-border-radius);
+  box-shadow: var(--p6o-control-shadow);
+  padding: 20px;
 }
