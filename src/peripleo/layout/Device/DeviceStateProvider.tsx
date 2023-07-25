@@ -1,14 +1,14 @@
 import { createContext, useContext, useLayoutEffect, useState } from 'react';
-import { Device, Size } from './Device';
+import { DeviceType, Size } from './Device';
 
 const isTouchDevice = (('ontouchstart' in window) ||
   (navigator.maxTouchPoints > 0) ||
   // @ts-ignore
   (navigator.msMaxTouchPoints > 0));
 
-const DeviceStateContext = createContext<Device>({ size: Size.DESKTOP, isTouchDevice });
+const DeviceStateContext = createContext<DeviceType>({ size: Size.DESKTOP, isTouchDevice });
 
-type DeviceStateContextProviderProps = {
+type DeviceStateProviderProps = {
 
   children: React.ReactElement
 
@@ -16,9 +16,9 @@ type DeviceStateContextProviderProps = {
 
 }
 
-export const DeviceStateContextProvider = (props: DeviceStateContextProviderProps) => {
+export const DeviceStateProvider = (props: DeviceStateProviderProps) => {
 
-  const [device, setDevice] = useState<Device>({
+  const [device, setDevice] = useState<DeviceType>({
     size: window.innerWidth > props.breakPoint ? Size.DESKTOP : Size.MOBILE, 
     isTouchDevice
   });
