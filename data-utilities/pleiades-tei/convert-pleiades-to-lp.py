@@ -18,10 +18,10 @@ def to_feature(row):
   if not pd.isna(row['description']):
     feature['properties']['description'] = row['description']
 
-  if not pd.isna(row['extent']):
+  if not pd.isna(row['representative_longitude']):
     feature['geometry'] = {
       'type': 'Point',
-      'coordinates': [row['representative_longitude'], row['representative_latitutde']]
+      'coordinates': [row['representative_longitude'], row['representative_latitude']]
     }
 
   return feature
@@ -31,5 +31,5 @@ geojson = {
   'features': list([ to_feature(row) for idx, row in df.iterrows() ])
 }
 
-with open('pleiades-gis-places.json', 'w') as outfile:
+with open('pleiades-all-places.json', 'w') as outfile:
   json.dump(geojson, outfile)
