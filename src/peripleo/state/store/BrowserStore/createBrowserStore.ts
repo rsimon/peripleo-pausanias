@@ -2,9 +2,12 @@ import { Item, Place, Trace, Store, WithId } from '../../Types';
 
 export const createLocalStore = <T extends WithId>(): Store<T> => {
 
+  const places = new Map<string, Place>();
+
   const allItems = (): Item<T>[] => null;
 
-  const allPlaces = (): Place[] => null;
+  const allPlaces = (): Place[] =>
+    ([...places.values()]);
 
   const allTraces = (): Trace<T>[] => null;
 
@@ -14,8 +17,19 @@ export const createLocalStore = <T extends WithId>(): Store<T> => {
 
   const getTracesAt = (placeOrId: Place | string): Trace<T>[] => null;
 
-  const setData = (places: Place[], traces: Trace<T>[], keepExisting = false) => {
-    console.log('loading data', places, traces);
+  const isEmpty = () => places.size === 0;
+
+  const setData = (p: Place[], t: Trace<T>[], keepExisting = false) => {
+    if (!keepExisting)
+      places.clear();
+
+    // Normalize @id field to id
+    p.forEach(p => { 
+      if (!p.id)
+        p.id = p['@id'];
+    });
+
+    p.forEach(place => places.set(place.id, place));
   }
 
   return {
@@ -25,6 +39,7 @@ export const createLocalStore = <T extends WithId>(): Store<T> => {
     getItemsAt,
     getPlacesIntersecting,
     getTracesAt,
+    isEmpty,
     minItemsPerPlace: 0,
     maxItemsPerPlace: 0,
     setData

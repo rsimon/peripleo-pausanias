@@ -70,6 +70,8 @@ export interface Store<T extends WithId> {
 
   getTracesAt(placeOrId: Place | string): Trace<T>[];
 
+  isEmpty(): boolean;
+
   minItemsPerPlace: number;
 
   maxItemsPerPlace: number;
