@@ -1,5 +1,5 @@
 import { createContext, useContext, useLayoutEffect, useState } from 'react';
-import { DeviceType, Size } from './Device';
+import { DeviceType, Size } from './Types';
 
 const isTouchDevice = (('ontouchstart' in window) ||
   (navigator.maxTouchPoints > 0) ||

@@ -1,19 +1,19 @@
-import { Desktop } from './Desktop';
-import { Mobile } from './Mobile';
+import { useDeviceState } from './DeviceStateProvider';
+import { Size } from './Types';
 
-export interface DeviceType {
+const Desktop = (props: { children: React.ReactElement }) => {
 
-  size: Size
+  const device = useDeviceState();
 
-  isTouchDevice: boolean
+  return device.size === Size.DESKTOP ? props.children : null;
 
 }
 
-export enum Size {
+const Mobile = (props: { children: React.ReactElement }) => {
 
-  MOBILE = 'MOBILE',
+  const device = useDeviceState();
 
-  DESKTOP = 'DESKTOP'
+  return device.size === Size.MOBILE ? props.children : null;
 
 }
 
