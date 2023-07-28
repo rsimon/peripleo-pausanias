@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'; 
 import { createRoot } from 'react-dom/client';
 import { Peripleo, BrowserStore, Controls, DraggablePanel, SearchHandler } from './peripleo';
-import { Map, Zoom } from './peripleo/maplibre';
+import { Layer, Map, Zoom } from './peripleo/maplibre';
 import { TEI } from './peripleo-ext';
-import { PlaceLayer } from './pausanias/PlaceLayer';
 
 import './peripleo/theme/default/index.css';
 import './pausanias/index.css';
@@ -40,7 +39,9 @@ export const App = () => {
           style={MAP_STYLE} 
           defaultBounds={[[14.3, 47.5], [17.1, 49.2]]}>
 
-          <PlaceLayer />
+          <Layer 
+            id="pleiades-places" 
+            toGeoJSON={search => null} />
           
           <Controls position="topright">
             <Zoom />
