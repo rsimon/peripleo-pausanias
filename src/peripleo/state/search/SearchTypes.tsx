@@ -1,4 +1,4 @@
-import { WithId } from '../Types';
+import { Bounds, WithId } from '../Types';
 
 export interface SearchState<T extends WithId> {
   
@@ -45,6 +45,8 @@ export interface SearchResult<T extends WithId> {
   total: number,
 
   items: ResultItem<T>[],
+
+  bounds: Bounds;
 
   aggregations?: {
 

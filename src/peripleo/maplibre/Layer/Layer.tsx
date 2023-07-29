@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useMap } from '../Map';
-import { SearchResult, SearchStatus, useSearch } from '../../state';
-import { WithId } from 'src/peripleo/state/Types';
-import { MapGeoJSONFeature } from 'maplibre-gl';
+import { SearchResult, SearchStatus, useSearch, useStore } from '../../state';
+import { FeatureCollection, Store, WithId } from 'src/peripleo/state/Types';
 
 const EMPTY_GEOJSON = {
   type: 'FeatureCollection',
@@ -13,13 +12,15 @@ export interface LayerProps<T extends WithId> {
 
   id: string;
 
-  toGeoJSON(result: SearchResult<T>): MapGeoJSONFeature;
+  toGeoJSON(arg: { result: SearchResult<T>, store: Store<T> }): FeatureCollection;
 
 }
 
 export const Layer = <T extends WithId>(props: LayerProps<T>) => {
 
   const map = useMap();
+
+  const store = useStore<T>();
 
   const { search } = useSearch<T>();
 
@@ -35,7 +36,7 @@ export const Layer = <T extends WithId>(props: LayerProps<T>) => {
   useEffect(() => {
     if (mapLoaded && search.status === SearchStatus.OK) {
       if (!sourceId) {
-        console.log(`Creating data layer ${props.id}`);
+        console.log(`[Peripleo] Creating data layer: ${props.id}`);
 
         // No source yet - create
         const sourceId = `${props.id}-source`;
@@ -57,10 +58,10 @@ export const Layer = <T extends WithId>(props: LayerProps<T>) => {
 
         setSourceId(sourceId);
       } else {
-        console.log(`Plotting data layer ${props.id}`);
+        const geojson = props.toGeoJSON({ result: search.result, store });
 
         // @ts-ignore
-        map.getSource(sourceId).setData(props.toGeoJSON(search.result));
+        map.getSource(sourceId).setData(geojson);
       }
     }
   }, [mapLoaded, sourceId, search, props.id, props.toGeoJSON]);

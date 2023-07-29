@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { MapGeoJSONFeature, Map as MapLibre, MapMouseEvent, PointLike } from 'maplibre-gl';
+import { MapGeoJSONFeature, Map as MapLibre, MapMouseEvent, PointLike, LngLatBoundsLike } from 'maplibre-gl';
 import { MapContext } from './MapContext';
 import { MapProps } from './MapProps';
 import { PopupContainer } from '../Popup';
@@ -44,14 +44,17 @@ export const Map = (props: MapProps) => {
     if (loaded || search.status !== SearchStatus.OK)
       return;
 
-    console.log('Initializing map');
+    console.log('[Peripleo] initializing map');
+
+    const { minLon, minLat, maxLon, maxLat } = search.result.bounds || {};
+
+    const bounds: LngLatBoundsLike = props.defaultBounds ? 
+      props.defaultBounds : [[ minLon, minLat ], [ maxLon, maxLat ]];
     
     const map = new MapLibre({
       container: ref.current,
       style: props.style,
-
-      // TODO retrieve initial bounds from search result
-      bounds: props.defaultBounds
+      bounds 
     });
 
     if (props.disableScrollZoom)

@@ -1,12 +1,50 @@
+export interface Feature {
+
+  type: 'Feature',
+
+  properties: {
+
+    [key: string]: any;
+
+  }
+
+  geometry: {
+
+    type: 'Point' | 'Polygon' | 'Polyline',
+
+    coordinates: number[] | number[][] | number[][][];
+
+  }
+
+}
+
+export interface FeatureCollection {
+
+  type: 'FeatureCollection',
+
+  features: Feature[];
+
+}
+
+export interface Bounds {
+
+  minLon: number;
+
+  minLat: number;
+
+  maxLon: number;
+
+  maxLat: number;
+
+} 
+
 export interface WithId {
 
   id: string
 
-} 
+}
 
-export interface Place {
-
-  type: 'Feature';
+export interface Place extends Feature {
 
   id: string;
 
@@ -15,14 +53,6 @@ export interface Place {
     title: string;
 
     [key: string]: any
-
-  }
-
-  geometry: {
-
-    type: 'Point';
-
-    coordinates: number[] | number[][] | number[][][];
 
   }
 
@@ -63,6 +93,8 @@ export interface Store<T extends WithId> {
   allPlaces(): Place[];
 
   allTraces(): Trace<T>[];
+
+  getExtent(): Bounds;
 
   getItemsAt(placeOrId: Place | string): Item<T>[];
 

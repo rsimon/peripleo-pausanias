@@ -6,7 +6,7 @@ import { TEI } from './peripleo-ext';
 
 import './peripleo/theme/default/index.css';
 import './pausanias/index.css';
-import { Place } from './peripleo/state/Types';
+import { FeatureCollection, Place } from './peripleo/state/Types';
 
 export const App = () => {
 
@@ -20,10 +20,15 @@ export const App = () => {
       .then(geojson => setPlaces(geojson.features));
   }, []);
 
-  const toGeoJSON = (search: SearchResult<Place>) => ({
-    type: 'FeatureCollection',
-    features: search.items
-  });
+  const toGeoJSON = ({ result }): FeatureCollection => { 
+
+    console.log('togeojson!', result);
+    
+    return {
+      type: 'FeatureCollection',
+      features: result.items
+    }
+  }
 
   return (
     <Peripleo>
@@ -36,6 +41,7 @@ export const App = () => {
             const all = store.allPlaces();
 
             return {
+              bounds: null,
               total: all.length,
               items: all
             }
@@ -47,7 +53,6 @@ export const App = () => {
 
           <Layer 
             id="pleiades-places" 
-            //@ts-ignore
             toGeoJSON={toGeoJSON} />
           
           <Controls position="topright">
