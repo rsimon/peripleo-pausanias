@@ -3,7 +3,7 @@ import { MapGeoJSONFeature, Map as MapLibre, MapMouseEvent, PointLike } from 'ma
 import { MapContext } from './MapContext';
 import { MapProps } from './MapProps';
 import { PopupContainer } from '../Popup';
-import { useSelectionState } from '../../state';
+import { SearchStatus, useSearch, useSelectionState } from '../../state';
 
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -13,7 +13,11 @@ export const Map = (props: MapProps) => {
 
   const ref = useRef<HTMLDivElement>(null);
 
+  const { search } = useSearch();
+
   const [map, setMap] = useState<MapLibre>(null);
+
+  const [loaded, setLoaded] = useState(false);
 
   const [selected, setSelected] = useSelectionState<MapGeoJSONFeature>();
 
@@ -37,9 +41,16 @@ export const Map = (props: MapProps) => {
   };
 
   useEffect(() => {
+    if (loaded || search.status !== SearchStatus.OK)
+      return;
+
+    console.log('Initializing map');
+    
     const map = new MapLibre({
       container: ref.current,
       style: props.style,
+
+      // TODO retrieve initial bounds from search result
       bounds: props.defaultBounds
     });
 
@@ -49,9 +60,8 @@ export const Map = (props: MapProps) => {
     map.on('click', onMapClicked);
 
     setMap(map);
-
-    return () => map.remove();
-  }, []);
+    setLoaded(true);
+  }, [search, loaded]);
 
   return (
     <div 

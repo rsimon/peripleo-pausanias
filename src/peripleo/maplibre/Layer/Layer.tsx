@@ -1,15 +1,15 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMap } from '../Map';
 import { SearchResult, SearchStatus, useSearch } from '../../state';
 import { WithId } from 'src/peripleo/state/Types';
 import { MapGeoJSONFeature } from 'maplibre-gl';
 
-const EMTPY_GEOJSON = {
+const EMPTY_GEOJSON = {
   type: 'FeatureCollection',
   features: []
 };
 
-export interface LayerProps<T extends WithId>{
+export interface LayerProps<T extends WithId> {
 
   id: string;
 
@@ -21,41 +21,49 @@ export const Layer = <T extends WithId>(props: LayerProps<T>) => {
 
   const map = useMap();
 
-  const { search } = useSearch();
+  const { search } = useSearch<T>();
+
+  const [mapLoaded, setMapLoaded] = useState(false);
+
+  const [sourceId, setSourceId] = useState<string | null>(null);
 
   useEffect(() => {
-    const onLoad = () => {
-      map.addSource(`${props.id}-source`, {
-        type: 'geojson',
-        data: EMTPY_GEOJSON
-      });
-
-      // @ts-ignore
-      map.addLayer({
-        id: props.id,
-        source: `${props.id}-source`, 
-        metadata: {
-          interactive: true
-        }
-      });  
-    };
-
+    const onLoad = () => setMapLoaded(true);
     map.on('load', onLoad);
-
-    return () => {
-      map.removeLayer(props.id);
-      map.removeSource(`${props.id}-source`);
-      map.off('load', onLoad);
-    }
   }, []);
 
   useEffect(() => {
-    if (search.status === SearchStatus.OK) {
-      // @ts-ignore
-      map.getSource(`${props.id}-source`).setData(props.toGeoJSON(search.result));
+    if (mapLoaded && search.status === SearchStatus.OK) {
+      if (!sourceId) {
+        console.log(`Creating data layer ${props.id}`);
+
+        // No source yet - create
+        const sourceId = `${props.id}-source`;
+
+        map.addSource(sourceId, {
+          type: 'geojson',
+          data: EMPTY_GEOJSON
+        });
+
+        // @ts-ignore
+        map.addLayer({
+          type: 'circle',
+          id: props.id,
+          source: sourceId,
+          metadata: {
+            interactive: true,
+          }
+        });
+
+        setSourceId(sourceId);
+      } else {
+        console.log(`Plotting data layer ${props.id}`);
+
+        // @ts-ignore
+        map.getSource(sourceId).setData(props.toGeoJSON(search.result));
+      }
     }
-  }, [search, props.id, props.toGeoJSON]);
+  }, [mapLoaded, sourceId, search, props.id, props.toGeoJSON]);
 
   return null;
-  
 }
