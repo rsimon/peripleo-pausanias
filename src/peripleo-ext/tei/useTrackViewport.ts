@@ -35,13 +35,13 @@ export const useTrackViewport = <T extends Element>(props: UseInViewProps) => {
         if (garbage.length > 0 )
           props.onViewportChange({ 
             entered: [], 
-            left: garbage.map(t => t.target) 
+            left: garbage.map(t => t.target)
           });
       }, 1000);
-    
+
       props.onViewportChange({
         entered: entriesEntered.map(e => e.target),
-        left: entriesLeft.map(e => e.target)
+        left: entriesLeft.map(e => e.target),
       });
     }
 

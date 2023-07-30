@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 import { SearchContext } from './SearchProvider';
 import { Filter, SearchArgs, SearchState, SearchStatus } from './SearchTypes';
 
@@ -6,41 +6,41 @@ export const useSearch = <T extends unknown>() => {
 
   const { search, setSearch } = useContext(SearchContext);
 
-  const runSearch = (args: SearchArgs = {}) =>
-    setSearch({ args, status: SearchStatus.PENDING, result: search.result });
+  const runSearch = useCallback((args: SearchArgs = {}) =>
+    setSearch({ args, status: SearchStatus.PENDING, result: search.result }), [setSearch]);
 
-  const refreshSearch = () =>
-    runSearch({ ...search.args });
+  const refreshSearch = useCallback(() =>
+    runSearch({ ...search.args }), [setSearch]);
 
-  const changeSearchQuery = (query: string) => 
-    runSearch({ ...search.args, query });
+  const changeSearchQuery = useCallback((query: string) => 
+    runSearch({ ...search.args, query }), [setSearch]);
 
-  const clearSearchQuery = () => 
-    runSearch({ ...search.args, query: undefined });
+  const clearSearchQuery = useCallback(() => 
+    runSearch({ ...search.args, query: undefined }), [setSearch]);
 
-  const setFilter = (filter: Filter) => {
+  const setFilter = useCallback((filter: Filter) => {
     const updatedFilters = [
       ...(search.args.filters || []).filter(f => f.name !== filter.name),
       filter
     ];
 
     runSearch({ ...search.args, filters: updatedFilters });
-  }
+  }, [setSearch]);
 
-  const clearFilter = (filterName: string) => {
+  const clearFilter = useCallback((filterName: string) => {
     const updatedFilters = [
       ...(search.args.filters || []).filter(f => f.name !== filterName)
     ];
 
     runSearch({ ...search.args, filters: updatedFilters });
-  }
+  }, [setSearch]);
 
-  const getFilter = (name: string) =>
-    search.args.filters?.find(f => f.name === name);
+  const getFilter = useCallback((name: string) =>
+    search.args.filters?.find(f => f.name === name), [setSearch]);
 
   // Note that switching the facet does not require 
   // a new search run!
-  const setActiveAggregation = (name: string) => 
+  const setActiveAggregation = useCallback((name: string) => 
     setSearch({ 
       args: {
         ...search.args,
@@ -48,7 +48,7 @@ export const useSearch = <T extends unknown>() => {
       }, 
       status: search.status,
       result: search.result 
-    });
+    }), [setSearch]);
 
   return {
     changeSearchQuery,

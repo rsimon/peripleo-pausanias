@@ -28,14 +28,7 @@ export const App = () => {
   const onTEILoaded = (placeNames: Element[]) =>
     setTrace(teiToTrace(placeNames));
 
-  const onViewportChange = (arg) => {
-    console.log(arg);
-  }
-
   const toGeoJSON = ({ result }): FeatureCollection => { 
-
-    console.log('togeojson!', result);
-    
     return {
       type: 'FeatureCollection',
       features: result.items
@@ -50,6 +43,7 @@ export const App = () => {
 
         <SearchHandler
           onSearch={({ store }) => {
+            console.log('search!');
             const all = store.allPlaces();
 
             return {
@@ -75,8 +69,7 @@ export const App = () => {
         <DraggablePanel>
           <TEIView
             src="sample.tei.xml" 
-            onLoad={onTEILoaded} 
-            onViewportChange={onViewportChange} />
+            onLoad={onTEILoaded} />
         </DraggablePanel>
       </BrowserStore>
     </Peripleo>
