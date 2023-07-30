@@ -38,12 +38,6 @@ export interface Bounds {
 
 } 
 
-export interface WithId {
-
-  id: string
-
-}
-
 export interface Place extends Feature {
 
   id: string;
@@ -58,19 +52,23 @@ export interface Place extends Feature {
 
 }
 
-export interface Trace<T extends WithId> {
+export interface Trace<T extends unknown> {
+
+  id: string;
 
   items: Item<T>[];
 
 }
 
-export interface Item<T extends WithId> {
+export interface Item<T extends unknown> {
 
   id: string;
 
   type: 'Annotation';
 
   target: {
+
+    type: 'Dataset';
 
     value: T;
 
@@ -80,13 +78,13 @@ export interface Item<T extends WithId> {
 
     type: 'Dataset';
 
-    value: WithId;
+    value: { id: string }[];
     
   }
 
 }
 
-export interface Store<T extends WithId> {
+export interface Store<T extends unknown> {
 
   allItems(): Item<T>[];
 
