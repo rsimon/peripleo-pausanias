@@ -1,11 +1,11 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
-import { Place, Trace, WithId, Store } from '../../Types';
+import { Place, Trace, Store } from '../../../Types';
 import { createLocalStore } from './createBrowserStore';
 import { useSearch } from '../../search';
 
-const BrowserStoreContext = createContext<Store<WithId>>(null);
+const BrowserStoreContext = createContext<Store<unknown>>(null);
 
-interface BrowserStoreProps<T extends WithId> {
+interface BrowserStoreProps<T extends unknown> {
 
   children: ReactNode;
 
@@ -15,7 +15,7 @@ interface BrowserStoreProps<T extends WithId> {
 
 }
 
-export const BrowserStore = <T extends WithId>(props: BrowserStoreProps<T>) => {
+export const BrowserStore = <T extends unknown>(props: BrowserStoreProps<T>) => {
 
   const { refreshSearch } = useSearch();
 
@@ -30,7 +30,7 @@ export const BrowserStore = <T extends WithId>(props: BrowserStoreProps<T>) => {
       setStore(s);
     } else {
       // Don't re-render empty changes
-      if (places.length + places.length === 0 && store.isEmpty())
+      if (places.length + traces.length === 0 && store.isEmpty())
         return; 
 
       store.setData(places, traces);
@@ -46,4 +46,4 @@ export const BrowserStore = <T extends WithId>(props: BrowserStoreProps<T>) => {
 
 }
 
-export const useStore = <T extends WithId>() => useContext(BrowserStoreContext) as Store<T>;
+export const useStore = <T extends unknown>() => useContext(BrowserStoreContext) as Store<T>;

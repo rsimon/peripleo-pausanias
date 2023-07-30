@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
-import { Store, WithId } from '../Types';
+import { Store } from '../../Types';
 import { useStore } from '../store';
 import { useSearch } from './useSearch';
 import { SearchArgs, SearchResult, SearchStatus } from './SearchTypes';
 
-interface SearchHandlerProps<T extends WithId> {
+interface SearchHandlerProps<T extends unknown> {
 
   onSearch(arg: { args: SearchArgs, store: Store<T> }): SearchResult<T>;
 
 }
 
-export const SearchHandler = <T extends WithId>(props: SearchHandlerProps<T>) => {
+export const SearchHandler = <T extends unknown>(props: SearchHandlerProps<T>) => {
 
   const store = useStore<T>();
 

@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { SearchContext } from './SearchProvider';
 import { Filter, SearchArgs, SearchState, SearchStatus } from './SearchTypes';
 
-export const useSearch = <T extends { id: string }>() => {
+export const useSearch = <T extends unknown>() => {
 
   const { search, setSearch } = useContext(SearchContext);
 

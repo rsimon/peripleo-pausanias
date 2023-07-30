@@ -1,6 +1,6 @@
-import { Item, Place, Trace, Store, WithId } from '../../Types';
+import { Item, Place, Trace, Store, Bounds } from '../../../Types';
 
-export const createLocalStore = <T extends WithId>(): Store<T> => {
+export const createLocalStore = <T extends unknown>(): Store<T> => {
 
   const places = new Map<string, Place>();
 
@@ -10,6 +10,8 @@ export const createLocalStore = <T extends WithId>(): Store<T> => {
     ([...places.values()]);
 
   const allTraces = (): Trace<T>[] => null;
+
+  const getExtent = (): Bounds => null;
 
   const getItemsAt = (placeOrId: Place | string): Item<T>[] => null;
 
@@ -25,8 +27,10 @@ export const createLocalStore = <T extends WithId>(): Store<T> => {
 
     // Normalize @id field to id
     p.forEach(p => { 
-      if (!p.id)
+      if (!p.id) {
         p.id = p['@id'];
+        delete p['@id'];
+      }
     });
 
     p.forEach(place => places.set(place.id, place));
@@ -36,6 +40,7 @@ export const createLocalStore = <T extends WithId>(): Store<T> => {
     allItems,
     allPlaces,
     allTraces,
+    getExtent,
     getItemsAt,
     getPlacesIntersecting,
     getTracesAt,

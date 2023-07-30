@@ -3,7 +3,7 @@ import { SearchState, SearchStatus } from './SearchTypes';
 
 const EMPTY = { args: {}, status: SearchStatus.PENDING };
 
-interface SearchContextValue<T extends { id: string } = { id: string }>{
+interface SearchContextValue<T extends unknown = unknown>{
 
   search: SearchState<T>;
 

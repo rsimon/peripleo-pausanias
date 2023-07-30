@@ -1,6 +1,6 @@
-import { Bounds, WithId } from '../Types';
+import { Bounds } from '../../Types';
 
-export interface SearchState<T extends WithId> {
+export interface SearchState<T extends unknown> {
   
   args: SearchArgs;
   
@@ -40,11 +40,11 @@ export enum SearchStatus {
 
 }
 
-export interface SearchResult<T extends WithId> {
+export interface SearchResult<T extends unknown> {
 
   total: number,
 
-  items: ResultItem<T>[],
+  items: T[],
 
   bounds: Bounds;
 
@@ -65,5 +65,3 @@ export interface SearchResult<T extends WithId> {
   }
 
 }
-
-export type ResultItem<T extends WithId> = T;

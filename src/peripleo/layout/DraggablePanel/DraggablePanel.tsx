@@ -12,6 +12,10 @@ export interface DraggablePanelProps {
   
   height?: CSSDimension;
 
+  left?: number;
+
+  top?: number; 
+
   width?: CSSDimension;
 
   onDragStart?(): void;
@@ -24,9 +28,13 @@ export const DraggablePanel = (props: DraggablePanelProps) => {
 
   const { children, className, onDragStart, onDragEnd } = props;
 
-  const width = props.width || '400px';
-
   const height = props.height || '500px';
+
+  const left = props.left || '20px';
+  
+  const top = props.left || '20px';
+
+  const width = props.width || '400px';
 
   const ref = useRef<HTMLDivElement>(null);
   
@@ -35,7 +43,7 @@ export const DraggablePanel = (props: DraggablePanelProps) => {
   return (
     <div 
       ref={ref}
-      style={{ width, height }}
+      style={{ top, left, width, height }}
       className={className ? `p6o-draggable-panel ${className}` : 'p6o-draggable-panel'}>
       {children}
     </div>

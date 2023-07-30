@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react'; 
 import { createRoot } from 'react-dom/client';
-import { Peripleo, BrowserStore, Controls, DraggablePanel, SearchHandler, SearchResult } from './peripleo';
+import { Peripleo, BrowserStore, Controls, DraggablePanel, SearchHandler } from './peripleo';
 import { Layer, Map, Zoom } from './peripleo/maplibre';
+import { FeatureCollection } from './peripleo/Types';
 import { TEI } from './peripleo-ext';
+import { teiToTrace } from './pausanias/PlaceReference';
 
 import './peripleo/theme/default/index.css';
 import './pausanias/index.css';
-import { FeatureCollection, Place } from './peripleo/state/Types';
 
 export const App = () => {
 
@@ -14,11 +15,18 @@ export const App = () => {
 
   const [places, setPlaces] = useState([]);
 
+  const [trace, setTrace] = useState(null);
+
+  const loaded = places.length > 0 && trace;
+
   useEffect(() => {
     fetch('pleiades-referenced-places.lp.json')
       .then(res => res.json())
       .then(geojson => setPlaces(geojson.features));
   }, []);
+
+  const onTEILoaded = (placeNames: Element[]) =>
+    setTrace(teiToTrace(placeNames))
 
   const toGeoJSON = ({ result }): FeatureCollection => { 
 
@@ -33,8 +41,8 @@ export const App = () => {
   return (
     <Peripleo>
       <BrowserStore
-        places={places}
-        traces={[]}>
+        places={loaded ? places : []}
+        traces={loaded ? [trace] : []}>
 
         <SearchHandler
           onSearch={({ store }) => {
@@ -58,11 +66,13 @@ export const App = () => {
           <Controls position="topright">
             <Zoom />
           </Controls>
-
-          <DraggablePanel>
-            <TEI src="sample.tei.xml" />
-          </DraggablePanel>
         </Map>
+
+        <DraggablePanel>
+          <TEI 
+            src="sample.tei.xml" 
+            onLoad={onTEILoaded} />
+        </DraggablePanel>
       </BrowserStore>
     </Peripleo>
   )
