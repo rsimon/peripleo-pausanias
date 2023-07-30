@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { Peripleo, BrowserStore, Controls, DraggablePanel, SearchHandler } from './peripleo';
 import { Layer, Map, Zoom } from './peripleo/maplibre';
 import { FeatureCollection } from './peripleo/Types';
-import { TEI } from './peripleo-ext';
+import { TEIView } from './peripleo-ext';
 import { teiToTrace } from './pausanias/PlaceReference';
 
 import './peripleo/theme/default/index.css';
@@ -26,7 +26,11 @@ export const App = () => {
   }, []);
 
   const onTEILoaded = (placeNames: Element[]) =>
-    setTrace(teiToTrace(placeNames))
+    setTrace(teiToTrace(placeNames));
+
+  const onViewportChange = (arg) => {
+    console.log(arg);
+  }
 
   const toGeoJSON = ({ result }): FeatureCollection => { 
 
@@ -69,9 +73,10 @@ export const App = () => {
         </Map>
 
         <DraggablePanel>
-          <TEI 
+          <TEIView
             src="sample.tei.xml" 
-            onLoad={onTEILoaded} />
+            onLoad={onTEILoaded} 
+            onViewportChange={onViewportChange} />
         </DraggablePanel>
       </BrowserStore>
     </Peripleo>
