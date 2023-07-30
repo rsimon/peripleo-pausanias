@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import CETEI from 'CETEIcean';
+import { useDebounce } from 'usehooks-ts';
 import { useSearch } from '../../peripleo/state';
 import { useTrackViewport } from './useTrackViewport';
 
@@ -17,7 +18,9 @@ export const TEIView = (props: TEIViewProps) => {
 
   const { setFilter } = useSearch();
 
-  const [visible, setVisible] = useState([]);
+  const [visible, setVisible] = useState<Element[]>([]);
+
+  const debouncedVisible = useDebounce<Element[]>(visible, 20);
 
   const onViewportChange = ({ entered, left}) =>
     setVisible(visible => ([
@@ -42,8 +45,8 @@ export const TEIView = (props: TEIViewProps) => {
   }, []);
 
   useEffect(() => {
-    setFilter({ name: 'visible-annotations', value: visible });
-  }, [visible, setFilter]);
+    setFilter({ name: 'visible-annotations', value: debouncedVisible });
+  }, [debouncedVisible, setFilter]);
 
   return (
     <div ref={ref} />
