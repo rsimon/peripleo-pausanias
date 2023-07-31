@@ -1,6 +1,6 @@
 import { Item, Trace } from '../peripleo/Types';
 
-interface PlaceReference {
+export interface PlaceReference {
 
   quote: string;
 

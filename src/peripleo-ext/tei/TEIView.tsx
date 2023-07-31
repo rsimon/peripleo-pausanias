@@ -45,7 +45,8 @@ export const TEIView = (props: TEIViewProps) => {
   }, []);
 
   useEffect(() => {
-    setFilter({ name: 'visible-places', value: debouncedVisible });
+    const ids = debouncedVisible.map(el => el.getAttribute('xml:id'));
+    setFilter({ name: 'visible-waypoints', value: ids });
   }, [debouncedVisible, setFilter]);
 
   return (

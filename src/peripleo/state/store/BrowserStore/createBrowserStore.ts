@@ -16,7 +16,10 @@ export const createLocalStore = <T extends unknown>(): Store<T> => {
 
   const places = new Map<string, Place>();
 
-  const allItems = (): Item<T>[] => null;
+  const items = new Map<string, Item<T>>();
+
+  const allItems = (): Item<T>[] =>
+    ([...items.values()]);
 
   const allPlaces = (): Place[] =>
     ([...places.values()]);
@@ -27,6 +30,8 @@ export const createLocalStore = <T extends unknown>(): Store<T> => {
 
   const getItemsAt = (placeOrId: Place | string): Item<T>[] => null;
 
+  const getItemById = (id: string) => items.get(id);
+
   const getPlaceById = (id: string) => places.get(id);
 
   const getPlacesIntersecting = (minLon: number, minLat: number, maxLon: number, maxLat: number): Place[] => null;
@@ -36,12 +41,15 @@ export const createLocalStore = <T extends unknown>(): Store<T> => {
   const isEmpty = () => places.size === 0;
 
   const setData = (p: Place[], t: Trace<T>[], keepExisting = false) => {
-    if (!keepExisting)
+    if (!keepExisting) {
       places.clear();
+      items.clear();
+    }
 
     p.forEach(normalizePlace);
 
     p.forEach(place => places.set(place.id, place));
+    t.forEach(t => t.items.forEach(item => items.set(item.id, item)));
   }
 
   return {
@@ -50,6 +58,7 @@ export const createLocalStore = <T extends unknown>(): Store<T> => {
     allTraces,
     getExtent,
     getItemsAt,
+    getItemById,
     getPlaceById,
     getPlacesIntersecting,
     getTracesAt,

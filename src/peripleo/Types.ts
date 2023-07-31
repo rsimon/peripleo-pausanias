@@ -96,6 +96,8 @@ export interface Store<T extends unknown> {
 
   getItemsAt(placeOrId: Place | string): Item<T>[];
 
+  getItemById(id: string): Item<T> | undefined;
+
   getPlaceById(id: string): Place | undefined;
 
   getPlacesIntersecting(minLon: number, minLat: number, maxLon: number, maxLat: number): Place[];
