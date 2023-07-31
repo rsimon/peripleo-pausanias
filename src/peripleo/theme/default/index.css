@@ -39,7 +39,7 @@
 }
 
 .p6o-draggable-panel {
-  background-color: var(--p6o-control-bg);
+  background-color: #fff;
   border-radius: var(--p6o-border-radius);
   box-shadow: var(--p6o-control-shadow);
   padding: 20px;

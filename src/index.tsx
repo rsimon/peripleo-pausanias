@@ -6,7 +6,6 @@ import { TEIView } from './peripleo-ext';
 import { importTEITrace, teiLayerStyle, onSearch, toGeoJSON } from './pausanias';
 
 import './peripleo/theme/default/index.css';
-import './pausanias/index.css';
 
 export const App = () => {
 
@@ -51,7 +50,7 @@ export const App = () => {
 
         <DraggablePanel>
           <TEIView
-            src="sample.tei.xml" 
+            src="pausanias-book1.tei.xml" 
             onLoad={onTEILoaded} />
         </DraggablePanel>
       </BrowserStore>
