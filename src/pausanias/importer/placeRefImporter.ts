@@ -1,16 +1,8 @@
-import { Item, Trace } from '../peripleo/Types';
+import { Item, Trace } from '../../peripleo/Types';
+import { PlaceReference } from '../Types';
 
-export interface PlaceReference {
-
-  quote: string;
-
-  tags: string[];
-
-}
-
-export const teiToTrace = (elements: Element[]): Trace<PlaceReference> => ({
-  id: 'Pausanias',
-
+export const importTEITrace = (id: string, elements: Element[]): Trace<PlaceReference> => ({
+  id,
   items: elements.map(el => {
     // Anotation ID
     const id = el.getAttribute('xml:id');

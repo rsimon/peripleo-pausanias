@@ -12,6 +12,8 @@ export interface LayerProps<T extends unknown> {
 
   id: string;
 
+  style: object;
+
   toGeoJSON(arg: { result: SearchResult<T>, store: Store<T> }): FeatureCollection;
 
 }
@@ -48,7 +50,7 @@ export const Layer = <T extends unknown>(props: LayerProps<T>) => {
 
         // @ts-ignore
         map.addLayer({
-          type: 'circle',
+          ...props.style,
           id: props.id,
           source: sourceId,
           metadata: {
@@ -64,7 +66,7 @@ export const Layer = <T extends unknown>(props: LayerProps<T>) => {
         map.getSource(sourceId).setData(geojson);
       }
     }
-  }, [mapLoaded, sourceId, search, props.id, props.toGeoJSON]);
+  }, [mapLoaded, sourceId, search, props.id, props.style, props.toGeoJSON]);
 
   return null;
 }

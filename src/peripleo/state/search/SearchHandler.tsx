@@ -4,17 +4,17 @@ import { useStore } from '../store';
 import { useSearch } from './useSearch';
 import { SearchArgs, SearchResult, SearchStatus } from './SearchTypes';
 
-interface SearchHandlerProps<T extends unknown> {
+interface SearchHandlerProps<T extends unknown, S extends unknown> {
 
-  onSearch(arg: { args: SearchArgs, store: Store<T> }): SearchResult<T>;
+  onSearch(arg: { args: SearchArgs, store: Store<T> }): SearchResult<S>;
 
 }
 
-export const SearchHandler = <T extends unknown>(props: SearchHandlerProps<T>) => {
+export const SearchHandler = <T extends unknown, S extends unknown>(props: SearchHandlerProps<T, S>) => {
 
   const store = useStore<T>();
 
-  const { search, setSearch } = useSearch<T>();
+  const { search, setSearch } = useSearch<S>();
 
   useEffect(() => {
     if (store && !store.isEmpty()) {

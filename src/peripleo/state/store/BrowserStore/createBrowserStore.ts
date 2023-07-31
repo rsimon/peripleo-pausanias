@@ -14,23 +14,29 @@ const normalizePlace = (p: Place): Place => {
 
 export const createLocalStore = <T extends unknown>(): Store<T> => {
 
+  // All places by ID
   const places = new Map<string, Place>();
 
-  const items = new Map<string, Item<T>>();
+  // List of items by trace ID
+  const traces = new Map<string, Trace<T>>();
+
+  // All items by ID, as a tuple [item, trace ID]
+  const items = new Map<string, { item: Item<T>, trace: string }>();
 
   const allItems = (): Item<T>[] =>
-    ([...items.values()]);
+    [...items.values()].map(t => t.item);
 
   const allPlaces = (): Place[] =>
     ([...places.values()]);
 
-  const allTraces = (): Trace<T>[] => null;
+  const allTraces = (): Trace<T>[] =>
+    ([...traces.values()]);
 
   const getExtent = (): Bounds => null;
 
   const getItemsAt = (placeOrId: Place | string): Item<T>[] => null;
 
-  const getItemById = (id: string) => items.get(id);
+  const getItemById = (id: string) => items.get(id)?.item;
 
   const getPlaceById = (id: string) => places.get(id);
 
@@ -49,7 +55,10 @@ export const createLocalStore = <T extends unknown>(): Store<T> => {
     p.forEach(normalizePlace);
 
     p.forEach(place => places.set(place.id, place));
-    t.forEach(t => t.items.forEach(item => items.set(item.id, item)));
+
+    t.forEach(t => traces.set(t.id, t));
+
+    t.forEach(t => t.items.forEach(item => items.set(item.id, { item, trace: t.id })));
   }
 
   return {
