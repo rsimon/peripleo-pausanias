@@ -45,7 +45,7 @@ export const TEIView = (props: TEIViewProps) => {
   }, []);
 
   useEffect(() => {
-    setFilter({ name: 'visible-annotations', value: debouncedVisible });
+    setFilter({ name: 'visible-places', value: debouncedVisible });
   }, [debouncedVisible, setFilter]);
 
   return (

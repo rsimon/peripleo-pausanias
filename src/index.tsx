@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Peripleo, BrowserStore, Controls, DraggablePanel, SearchHandler } from './peripleo';
 import { Layer, Map, Zoom } from './peripleo/maplibre';
-import { FeatureCollection } from './peripleo/Types';
+import { FeatureCollection, Place } from './peripleo/Types';
 import { TEIView } from './peripleo-ext';
 import { teiToTrace } from './pausanias/PlaceReference';
 
@@ -42,14 +42,29 @@ export const App = () => {
         traces={loaded ? [trace] : []}>
 
         <SearchHandler
-          onSearch={({ store }) => {
-            console.log('search!');
+          onSearch={({ args, store }) => {
             const all = store.allPlaces();
 
-            return {
-              bounds: null,
-              total: all.length,
-              items: all
+            const filter = args.filters?.find(f => f.name === 'visible-places');
+
+            if (filter) {
+              const visible: string[] = filter.value
+                .map((el: Element) => el.getAttribute('ref'))
+                .filter((str: string) => str)
+                .map((id: string) => store.getPlaceById(id))
+                .filter((p: Place) => p)
+
+              return {
+                bounds: null,
+                total: visible.length,
+                items: visible
+              }
+            } else {
+              return {
+                bounds: null,
+                total: all.length,
+                items: all
+              }
             }
           }} />
 
