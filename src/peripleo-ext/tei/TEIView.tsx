@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import CETEI from 'CETEIcean';
+import Switch from 'react-switch';
 import { useDebounce } from 'usehooks-ts';
 import { useSearch } from '../../peripleo/state';
 import { useTrackViewport } from './useTrackViewport';
@@ -7,6 +8,8 @@ import { useTrackViewport } from './useTrackViewport';
 import './TEIView.css';
 
 interface TEIViewProps {
+
+  title: string;
 
   src: string;
 
@@ -16,9 +19,11 @@ interface TEIViewProps {
 
 export const TEIView = (props: TEIViewProps) => {
 
-  const { setFilter } = useSearch();
+  const { clearFilter, getFilter, setFilter } = useSearch();
 
   const [visible, setVisible] = useState<Element[]>([]);
+
+  const [showAll, setShowAll] = useState(false);
 
   const debouncedVisible = useDebounce<Element[]>(visible, 20);
 
@@ -45,12 +50,38 @@ export const TEIView = (props: TEIViewProps) => {
   }, []);
 
   useEffect(() => {
-    const ids = debouncedVisible.map(el => el.getAttribute('xml:id'));
-    setFilter({ name: 'visible-waypoints', value: ids });
-  }, [debouncedVisible, setFilter]);
+    if (showAll) {
+      if (getFilter('visible-waypoints'))
+        clearFilter('visible-waypoints');
+    } else {
+      const ids = debouncedVisible.map(el => el.getAttribute('xml:id'));
+      setFilter({ name: 'visible-waypoints', value: ids });
+    }
+  }, [debouncedVisible, showAll]);
 
   return (
-    <div ref={ref} />
+    <article className="teiview-container">
+      <header>
+        <h1>{props.title}</h1>
+
+        <label className="teiview-mode-switch">
+          <span>Map all places</span>
+
+          <Switch 
+            height={18}
+            width={40}
+            onColor="#ced0d1"
+            offColor="#ced0d1"
+            checkedIcon={false}
+            uncheckedIcon={false}
+            checked={!showAll}
+            onChange={checked => setShowAll(!checked)} />
+          <span>Places in view</span>
+        </label>
+      </header>
+
+      <div ref={ref} />
+    </article>
   )
 
 }

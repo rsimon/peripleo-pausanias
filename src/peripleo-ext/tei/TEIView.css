@@ -1,3 +1,18 @@
+.teiview-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.teiview-container header {
+  flex-grow: 0;
+}
+
+.teiview-container > div {
+  flex-grow: 1;
+  overflow-y: scroll;
+}
+
 tei-body {
   white-space:normal !important;
   line-height:170%;
