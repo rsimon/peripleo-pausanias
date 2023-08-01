@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'; 
 import { createRoot } from 'react-dom/client';
 import { Peripleo, BrowserStore, Controls, DraggablePanel, SearchHandler } from './peripleo';
-import { Layer, Map, Zoom } from './peripleo/maplibre';
+import { Layer, Map, PulsingSelectionMarker, Zoom } from './peripleo/maplibre';
 import { TEIView } from './peripleo-ext';
 import { importTEITrace, teiLayerStyle, onSearch, toGeoJSON } from './pausanias';
 
@@ -27,6 +27,10 @@ export const App = () => {
   const onTEILoaded = (placeNames: Element[]) =>
     setTrace(importTEITrace('Pausanias', placeNames));
 
+  const onSelectPlaceName = (placeName: Element) => {
+    // 
+  }
+
   return (
     <Peripleo>
       <BrowserStore
@@ -42,7 +46,12 @@ export const App = () => {
             id="pleiades-places" 
             style={teiLayerStyle}
             toGeoJSON={toGeoJSON} />
-          
+
+          <PulsingSelectionMarker 
+            duration={1000}
+            size={80} 
+            rgb={[246, 112, 86]} />
+
           <Controls position="topright">
             <Zoom />
           </Controls>
@@ -53,7 +62,8 @@ export const App = () => {
           <TEIView
             title="Pausanias Book 1"
             src="pausanias-book1.tei.xml" 
-            onLoad={onTEILoaded} />
+            onLoad={onTEILoaded} 
+            onSelect={onSelectPlaceName} />
         </DraggablePanel>
       </BrowserStore>
     </Peripleo>

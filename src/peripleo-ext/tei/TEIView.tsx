@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { MouseEvent, useEffect, useState } from 'react';
 import CETEI from 'CETEIcean';
 import Switch from 'react-switch';
 import { useDebounce } from 'usehooks-ts';
@@ -7,12 +7,20 @@ import { useTrackViewport } from './useTrackViewport';
 
 import './TEIView.css';
 
-// Shorthand to add a CSS class to the element for the annotation
+// Shorthand
 const addClass = (id: string, cls: string) => {
   const elem = document.getElementById(id);
 
   if (elem)
     elem.classList.add(cls);
+}
+
+// Shorthand
+const deselect = (root: Element) => {
+  root.querySelectorAll('.p6o-tei-selected').forEach(elem => {
+    elem.classList.remove('p6o-tei-selected');
+    elem.classList.remove('p6o-tei-primary');
+  });
 }
 
 interface TEIViewProps {
@@ -22,6 +30,8 @@ interface TEIViewProps {
   src: string;
 
   onLoad(placeNames: Element[]): void;
+
+  onSelect(placeName: Element): void;
 
 }
 
@@ -76,11 +86,7 @@ export const TEIView = (props: TEIViewProps) => {
     if (!store)
       return;
 
-    // Deselect
-    ref.current.querySelectorAll('.p6o-tei-selected').forEach(elem => {
-      elem.classList.remove('p6o-tei-selected');
-      elem.classList.remove('p6o-tei-primary');
-    });
+    deselect(ref.current);
 
     if (!selection)
       return; 
@@ -88,6 +94,19 @@ export const TEIView = (props: TEIViewProps) => {
     const toSelect = store.getItemsAt(selection.id);
     toSelect.forEach(item => addClass(item.id, 'p6o-tei-selected'));
   }, [ store, selection ]);
+
+  const onClick = (evt: MouseEvent) => {
+    const el = evt.target as Element;
+    const tagName = el?.tagName;
+
+    if (tagName === 'TEI-PLACENAME') {
+      deselect(ref.current);
+
+      props.onSelect(el);
+      
+      el.classList.add('p6o-tei-selected', 'p6o-tei-primary');
+    }
+  }
 
   return (
     <article className="p6o-teiview-container">
@@ -110,7 +129,10 @@ export const TEIView = (props: TEIViewProps) => {
         </div>
       </header>
 
-      <div className="p6o-tei-content" ref={ref} />
+      <div 
+        ref={ref} 
+        className="p6o-tei-content"
+        onClick={onClick} />
     </article>
   )
 
