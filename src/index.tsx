@@ -8,7 +8,6 @@ import { importTEITrace, teiLayerStyle, onSearch, toGeoJSON } from './pausanias'
 import './peripleo/theme/default/index.css';
 import './peripleo-ext/theme/default/index.css';
 
-
 export const App = () => {
 
   const MAP_STYLE = document.querySelector('meta[name="map.style"]')?.getAttribute('content');
