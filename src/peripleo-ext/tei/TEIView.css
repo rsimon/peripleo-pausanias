@@ -32,12 +32,12 @@ tei-body {
   background-color:#ecf0f1;
 }
 
-tei-body .selected {
-  background-color:rgb(187, 136, 70) !important;
-  color:#fff !important;
+tei-body .p6o-tei-selected {
+  background-color:#ffc085;
+  border-color: #663b13;
 }
 
-tei-body .selected.primary {
+tei-body .p6o-tei-selected.primary {
   background-color:red !important;
 }
 

@@ -7,6 +7,14 @@ import { useTrackViewport } from './useTrackViewport';
 
 import './TEIView.css';
 
+// Shorthand to add a CSS class to the element for the annotation
+const addClass = (id: string, cls: string) => {
+  const elem = document.getElementById(id);
+
+  if (elem)
+    elem.classList.add(cls);
+}
+
 interface TEIViewProps {
 
   title: string;
@@ -78,29 +86,7 @@ export const TEIView = (props: TEIViewProps) => {
       return; 
 
     const toSelect = store.getItemsAt(selection.id);
-    console.log('to select', toSelect);
-
-    /* 
-
-    // Depending on selection, get linked or sibling annotations
-    let toSelect = [];
-
-    if (props.selected?.type === 'Annotation') {
-      // If an annotation is selected, fetch all links in this annotation
-      // and that get all other annotations linking to the same URI
-      toSelect = siblingsTo(props.selected);
-
-      // In addition, highlight *this* annotation extra and scroll into view 
-      addClass(props.selected, 'primary')
-        .scrollIntoView({ block: 'nearest', inline: 'nearest' });
-    } else if (props.selected?.type === 'Feature') {
-      // If a place is selected, fetch all annotations linked to it
-      toSelect = linkedTo(props.selected);
-    }
-
-    // Select
-    toSelect.forEach(annotation => addClass(annotation, 'selected'));
-    */
+    toSelect.forEach(item => addClass(item.id, 'p6o-tei-selected'));
   }, [ store, selection ]);
 
   return (

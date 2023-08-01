@@ -1,5 +1,4 @@
-import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
-import { useSearch } from '../search';
+import { ReactNode, createContext, useContext, useState } from 'react';
 import { Feature } from 'src/peripleo/Types';
 
 export type SelectionContextState = [
@@ -24,13 +23,6 @@ export const SelectionProvider = (props: { children: ReactNode }) => {
       _setSelection(undefined);
     }
   }
-
-  const { search } = useSearch();
-
-  useEffect(() => {
-    // Clear the selection if the search changes
-    setSelection(null);
-  }, [search.args]);
 
   return (
     <SelectionContext.Provider value={[selection, setSelection]}>
