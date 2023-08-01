@@ -27,10 +27,6 @@ export const App = () => {
   const onTEILoaded = (placeNames: Element[]) =>
     setTrace(importTEITrace('Pausanias', placeNames));
 
-  const onSelectPlaceName = (placeName: Element) => {
-    // 
-  }
-
   return (
     <Peripleo>
       <BrowserStore
@@ -42,15 +38,15 @@ export const App = () => {
         <Map 
           style={MAP_STYLE}>
 
-          <Layer 
-            id="pleiades-places" 
-            style={teiLayerStyle}
-            toGeoJSON={toGeoJSON} />
-
           <PulsingSelectionMarker 
             duration={1000}
             size={80} 
             rgb={[246, 112, 86]} />
+
+          <Layer 
+            id="pleiades-places" 
+            style={teiLayerStyle}
+            toGeoJSON={toGeoJSON} />
 
           <Controls position="topright">
             <Zoom />
@@ -62,8 +58,7 @@ export const App = () => {
           <TEIView
             title="Pausanias Book 1"
             src="pausanias-book1.tei.xml" 
-            onLoad={onTEILoaded} 
-            onSelect={onSelectPlaceName} />
+            onLoad={onTEILoaded} />
         </DraggablePanel>
       </BrowserStore>
     </Peripleo>

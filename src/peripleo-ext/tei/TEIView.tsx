@@ -2,10 +2,20 @@ import { MouseEvent, useEffect, useState } from 'react';
 import CETEI from 'CETEIcean';
 import Switch from 'react-switch';
 import { useDebounce } from 'usehooks-ts';
-import { useSearch, useSelectionValue, useStore } from '../../peripleo/state';
+import { useSearch, useSelectionState, useSelectionValue, useStore } from '../../peripleo/state';
 import { useTrackViewport } from './useTrackViewport';
 
 import './TEIView.css';
+
+interface TEIViewProps {
+
+  title: string;
+
+  src: string;
+
+  onLoad(placeNames: Element[]): void;
+
+}
 
 // Shorthand
 const addClass = (id: string, cls: string) => {
@@ -23,23 +33,11 @@ const deselect = (root: Element) => {
   });
 }
 
-interface TEIViewProps {
-
-  title: string;
-
-  src: string;
-
-  onLoad(placeNames: Element[]): void;
-
-  onSelect(placeName: Element): void;
-
-}
-
 export const TEIView = (props: TEIViewProps) => {
 
   const { clearFilter, getFilter, setFilter } = useSearch();
 
-  const selection = useSelectionValue();
+  const [selection, setSelection] = useSelectionState();
 
   const store = useStore();
 
@@ -102,7 +100,10 @@ export const TEIView = (props: TEIViewProps) => {
     if (tagName === 'TEI-PLACENAME') {
       deselect(ref.current);
 
-      props.onSelect(el);
+      const placeId = el.getAttribute('ref');
+      const place = placeId ? store.getPlaceById(placeId) : undefined;
+
+      setSelection(place);
       
       el.classList.add('p6o-tei-selected', 'p6o-tei-primary');
     }

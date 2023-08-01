@@ -18,7 +18,7 @@ export const Marker = (size: number, rgb: [number, number, number], duration: nu
     const canvas = document.createElement('canvas');
     canvas.width = this.width;
     canvas.height = this.height;
-    this.context = canvas.getContext('2d');
+    this.context = canvas.getContext('2d', { willReadFrequently: true });
   },
   
   render: function () {
