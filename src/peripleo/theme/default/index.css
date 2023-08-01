@@ -1,14 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
+
 :root {
-  --p6o-border-radius: 4px;
+  --p6o-border-radius: 12px;
 
   --p6o-control-bg: #fafafa;
   --p6o-control-bg-hover: #fff;
-  --p6o-control-border: 1px solid rgba(0,0,0,.28);
-  --p6o-control-shadow: 0 0 8px rgba(0,0,0,.35);
+  --p6o-control-border: 1px solid rgba(0, 0, 0, .2);
+  --p6o-control-shadow: 0 0 8px rgba(0, 0, 0, .3);
 
   --p6o-flex-gap: 8px;
 
+  --p6o-section-bg-light: #ededed;
+  --p6o-section-border-light: rgba(0, 0, 0, .1);
+
   --p6o-text-color: #303030;
+}
+
+html, body {
+  font-family: Roboto, Arial, Helvetica, sans-serif;
+}
+
+h1 {
+  font-size: 1.125em;
+  font-weight: 500;
+  margin: 0.4em 0;
+  padding: 0;
 }
 
 .p6o-controls-container {
@@ -42,5 +58,12 @@
   background-color: #fff;
   border-radius: var(--p6o-border-radius);
   box-shadow: var(--p6o-control-shadow);
-  padding: 20px;
+}
+
+.p6o-draggable-panel header {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 5px 15px;
 }

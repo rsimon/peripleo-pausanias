@@ -1,16 +1,28 @@
-.teiview-container {
+.p6o-teiview-container {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-.teiview-container header {
+.p6o-teiview-container header {
   flex-grow: 0;
 }
 
-.teiview-container > div {
+.p6o-tei-content {
   flex-grow: 1;
   overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.p6o-tei-content::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+}
+
+.p6o-tei-content::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, .5);
+  box-shadow: 0 0 1px rgba(255, 255, 255, .5);
 }
 
 tei-body {

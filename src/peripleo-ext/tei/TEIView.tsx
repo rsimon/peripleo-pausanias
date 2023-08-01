@@ -60,27 +60,27 @@ export const TEIView = (props: TEIViewProps) => {
   }, [debouncedVisible, showAll]);
 
   return (
-    <article className="teiview-container">
+    <article className="p6o-teiview-container">
       <header>
         <h1>{props.title}</h1>
 
-        <label className="teiview-mode-switch">
-          <span>Map all places</span>
+        <div className="p6o-teiview-mode-switch">
+          <span>All Places</span>
 
           <Switch 
             height={18}
-            width={40}
+            width={34}
             onColor="#ced0d1"
             offColor="#ced0d1"
             checkedIcon={false}
             uncheckedIcon={false}
             checked={!showAll}
             onChange={checked => setShowAll(!checked)} />
-          <span>Places in view</span>
-        </label>
+          <span>Places in View</span>
+        </div>
       </header>
 
-      <div ref={ref} />
+      <div className="p6o-tei-content" ref={ref} />
     </article>
   )
 

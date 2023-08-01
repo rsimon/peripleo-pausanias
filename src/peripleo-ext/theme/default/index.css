@@ -1,0 +1,23 @@
+.p6o-teiview-container header {
+  background-color: #fff;
+  border-bottom: 1px solid var(--p6o-section-border-light);
+  border-radius: var(--p6o-border-radius) var(--p6o-border-radius) 0 0;
+}
+
+.p6o-teiview-container {
+  border: var(--p6o-control-border);
+  background-color: var(--p6o-section-bg-light);
+  border-radius: var(--p6o-border-radius);
+}
+
+.p6o-teiview-mode-switch {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  font-size: 13px;
+  gap: 5px;
+}
+
+.p6o-tei-content {
+  padding: 15px;
+}
