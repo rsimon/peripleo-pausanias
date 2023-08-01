@@ -47,7 +47,7 @@ export const Map = (props: MapProps) => {
     console.log('[Peripleo] initializing map');
 
     const { minLon, minLat, maxLon, maxLat } = search.result.bounds || {};
-
+    
     const bounds: LngLatBoundsLike = props.defaultBounds ? 
       props.defaultBounds : [[ minLon, minLat ], [ maxLon, maxLat ]];
     

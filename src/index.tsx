@@ -36,8 +36,7 @@ export const App = () => {
         <SearchHandler onSearch={onSearch} />
 
         <Map 
-          style={MAP_STYLE} 
-          defaultBounds={[[14.3, 47.5], [17.1, 49.2]]}>
+          style={MAP_STYLE}>
 
           <Layer 
             id="pleiades-places" 

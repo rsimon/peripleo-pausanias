@@ -5,7 +5,7 @@ export interface MapProps {
 
   style: string; 
   
-  defaultBounds: [[number, number], [number, number]];
+  defaultBounds?: [[number, number], [number, number]];
 
   children?: ReactNode;
 

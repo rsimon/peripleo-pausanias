@@ -35,8 +35,8 @@ export const onSearch = (
     const byPlace = aggregateByPlace(visibleReferences);
 
     return {
-      // TODO
-      bounds: { minLon: 0, minLat: 0, maxLon: 0, maxLat: 0 },
+      // TODO doesn't take visible refs into account!
+      bounds: store.getExtent(),
       total: visibleReferences.length,
       items: visibleReferences,
       aggregations: { byPlace }
@@ -47,8 +47,7 @@ export const onSearch = (
     const byPlace = aggregateByPlace(all);
 
     return {
-      // TODO
-      bounds: { minLon: 0, minLat: 0, maxLon: 0, maxLat: 0 },
+      bounds: store.getExtent(),
       total: all.length,
       items: all,
       aggregations: { byPlace }

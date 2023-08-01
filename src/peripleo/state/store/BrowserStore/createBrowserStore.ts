@@ -1,3 +1,4 @@
+import bbox from '@turf/bbox';
 import { Item, Place, Trace, Store, Bounds } from '../../../Types';
 
 // Various data normalization ops
@@ -23,6 +24,13 @@ export const createLocalStore = <T extends unknown>(): Store<T> => {
   // All items by ID, as a tuple [item, trace ID]
   const items = new Map<string, { item: Item<T>, trace: string }>();
 
+  const extent = { 
+    minLon: 0,
+    minLat: 0,
+    maxLon: 0,
+    maxLat: 0
+  };
+
   const allItems = (): Item<T>[] =>
     [...items.values()].map(t => t.item);
 
@@ -32,7 +40,7 @@ export const createLocalStore = <T extends unknown>(): Store<T> => {
   const allTraces = (): Trace<T>[] =>
     ([...traces.values()]);
 
-  const getExtent = (): Bounds => null;
+  const getExtent = (): Bounds => ({ ...extent });
 
   const getItemsAt = (placeOrId: Place | string): Item<T>[] => null;
 
@@ -52,9 +60,22 @@ export const createLocalStore = <T extends unknown>(): Store<T> => {
       items.clear();
     }
 
-    p.forEach(normalizePlace);
+    // Remove unlocated places
+    const located = p.filter(p => Boolean(p.geometry));
+    located.forEach(normalizePlace);
+    
+    located.forEach(place => places.set(place.id, place));
 
-    p.forEach(place => places.set(place.id, place));
+    // Compute extent
+    if (located.length > 0) {
+      const [ minLon, minLat, maxLon, maxLat ] = 
+        bbox({ type: 'FeatureCollection', features: located });
+      
+      extent.minLon = minLon;
+      extent.minLat = minLat;
+      extent.maxLon = maxLon;
+      extent.maxLat = maxLat;
+    }
 
     t.forEach(t => traces.set(t.id, t));
 
