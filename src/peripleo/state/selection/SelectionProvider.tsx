@@ -1,19 +1,29 @@
 import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
 import { useSearch } from '../search';
+import { Feature } from 'src/peripleo/Types';
 
 export type SelectionContextState = [
 
-  any | null,
+  Feature | undefined,
 
-  (selection: any | null) => void
+  (selection?: Feature) => void
 
 ]
 
-export const SelectionContext = createContext<SelectionContextState>([null, null]);
+export const SelectionContext = createContext<SelectionContextState>([undefined, undefined]);
 
-export const SelectionProvider = <T extends any>(props: { children: ReactNode }) => {
+export const SelectionProvider = (props: { children: ReactNode }) => {
 
-  const [selection, setSelection] = useState<T | null>(null);
+  const [selection, _setSelection] = useState<Feature | undefined>(undefined);
+
+  const setSelection = (f?: Feature) => {
+    if (f) {
+      const id = f.id || f.properties.id;
+      _setSelection(({ ...f, id }));
+    } else {
+      _setSelection(undefined);
+    }
+  }
 
   const { search } = useSearch();
 
@@ -30,11 +40,11 @@ export const SelectionProvider = <T extends any>(props: { children: ReactNode })
 
 }
 
-export const useSelectionState = <T extends any>() => {
-  return useContext(SelectionContext) as [T, (selection: T) => void];
+export const useSelectionState = () => {
+  return useContext(SelectionContext);
 }
 
-export const useSelectionValue = <T extends any>() => {
+export const useSelectionValue = () => {
   const [ selection, ] = useContext(SelectionContext);
-  return selection as T;
+  return selection;
 }

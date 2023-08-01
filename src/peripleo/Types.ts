@@ -1,5 +1,7 @@
 export interface Feature {
 
+  id: string;
+
   type: 'Feature',
 
   properties: {

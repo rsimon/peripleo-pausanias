@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import CETEI from 'CETEIcean';
 import Switch from 'react-switch';
 import { useDebounce } from 'usehooks-ts';
-import { useSearch } from '../../peripleo/state';
+import { useSearch, useSelectionValue, useStore } from '../../peripleo/state';
 import { useTrackViewport } from './useTrackViewport';
 
 import './TEIView.css';
@@ -20,6 +20,10 @@ interface TEIViewProps {
 export const TEIView = (props: TEIViewProps) => {
 
   const { clearFilter, getFilter, setFilter } = useSearch();
+
+  const selection = useSelectionValue();
+
+  const store = useStore();
 
   const [visible, setVisible] = useState<Element[]>([]);
 
@@ -58,6 +62,46 @@ export const TEIView = (props: TEIViewProps) => {
       setFilter({ name: 'visible-waypoints', value: ids });
     }
   }, [debouncedVisible, showAll]);
+
+  // Selection changed
+  useEffect(() => {
+    if (!store)
+      return;
+
+    // Deselect
+    ref.current.querySelectorAll('.p6o-tei-selected').forEach(elem => {
+      elem.classList.remove('p6o-tei-selected');
+      elem.classList.remove('p6o-tei-primary');
+    });
+
+    if (!selection)
+      return; 
+
+    const toSelect = store.getItemsAt(selection.id);
+    console.log('to select', toSelect);
+
+    /* 
+
+    // Depending on selection, get linked or sibling annotations
+    let toSelect = [];
+
+    if (props.selected?.type === 'Annotation') {
+      // If an annotation is selected, fetch all links in this annotation
+      // and that get all other annotations linking to the same URI
+      toSelect = siblingsTo(props.selected);
+
+      // In addition, highlight *this* annotation extra and scroll into view 
+      addClass(props.selected, 'primary')
+        .scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    } else if (props.selected?.type === 'Feature') {
+      // If a place is selected, fetch all annotations linked to it
+      toSelect = linkedTo(props.selected);
+    }
+
+    // Select
+    toSelect.forEach(annotation => addClass(annotation, 'selected'));
+    */
+  }, [ store, selection ]);
 
   return (
     <article className="p6o-teiview-container">
