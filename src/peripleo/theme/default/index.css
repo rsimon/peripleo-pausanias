@@ -1,4 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap');
+
+@import './dropdown/index.css';
 
 :root {
   --p6o-border-radius: 12px;
@@ -28,6 +30,9 @@ h1 {
 }
 
 .p6o-controls-container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--p6o-flex-gap);
   padding: 20px;
 }
 

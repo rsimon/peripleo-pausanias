@@ -1,9 +1,22 @@
 import { useEffect, useState } from 'react'; 
 import { createRoot } from 'react-dom/client';
-import { Peripleo, BrowserStore, Controls, DraggablePanel, SearchHandler } from './peripleo';
-import { Layer, Map, PulsingSelectionMarker, Zoom } from './peripleo/maplibre';
 import { TEIView } from './peripleo-ext';
 import { importTEITrace, teiLayerStyle, onSearch, toGeoJSON } from './pausanias';
+import { 
+  Peripleo,
+  BrowserStore, 
+  Controls, 
+  DraggablePanel, 
+  FeatureCollection,
+  SearchHandler 
+} from './peripleo';
+import { 
+  Layer, 
+  LayerSwitcher,
+  Map as MapLibreMap, 
+  PulsingSelectionMarker, 
+  Zoom 
+} from './peripleo/maplibre';
 
 import './peripleo/theme/default/index.css';
 import './peripleo-ext/theme/default/index.css';
@@ -16,12 +29,19 @@ export const App = () => {
 
   const [trace, setTrace] = useState(null);
 
+  const [layers, setLayers] = useState(new Map<string, FeatureCollection>());
+
   const loaded = places.length > 0 && trace;
 
   useEffect(() => {
     fetch('pleiades-referenced-places.lp.json')
       .then(res => res.json())
       .then(geojson => setPlaces(geojson.features));
+
+    fetch('ascsa-monuments-places.lp.json')
+      .then(res => res.json())
+      .then(geojson => setLayers(map =>
+        new Map(map).set('ASCSA Monuments', geojson as FeatureCollection)))
   }, []);
 
   const onTEILoaded = (placeNames: Element[]) =>
@@ -35,7 +55,7 @@ export const App = () => {
 
         <SearchHandler onSearch={onSearch} />
 
-        <Map 
+        <MapLibreMap 
           style={MAP_STYLE}>
 
           <PulsingSelectionMarker 
@@ -50,8 +70,9 @@ export const App = () => {
 
           <Controls position="topright">
             <Zoom />
+            <LayerSwitcher />
           </Controls>
-        </Map>
+        </MapLibreMap>
 
         <DraggablePanel
           width={450}>
