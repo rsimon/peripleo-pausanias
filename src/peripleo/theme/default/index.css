@@ -19,6 +19,7 @@
 }
 
 html, body {
+  color: var(--p6o-text-color);
   font-family: Roboto, Arial, Helvetica, sans-serif;
 }
 

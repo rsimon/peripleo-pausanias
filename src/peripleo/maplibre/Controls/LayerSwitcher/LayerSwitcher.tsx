@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Check, Stack } from '@phosphor-icons/react';
+import { CheckCircle, Circle, Stack } from '@phosphor-icons/react';
 
 interface LayerSwitcherProps {
 
@@ -27,25 +27,37 @@ export const LayerSwitcher = (props: LayerSwitcherProps) => {
       </DropdownMenu.Trigger>
 
       <DropdownMenu.Portal>
-        <DropdownMenu.Content className="dropdown-content">
+        <DropdownMenu.Content side="left" sideOffset={8} className="dropdown-content">
+          <DropdownMenu.Label className="dropdown-label">
+            Map Layers
+          </DropdownMenu.Label>
+
+          <DropdownMenu.Separator className="dropdown-separator" />
+
           <DropdownMenu.CheckboxItem
-            className="dropdown-checkbox-item"
+            className="dropdown-item dropdown-checkbox-item"
             checked={checked}
             onCheckedChange={setChecked}
             onSelect={onSelect}>
 
-            <DropdownMenu.ItemIndicator>
-              <Check />
+            <DropdownMenu.ItemIndicator className="dropdown-indicator">
+              <CheckCircle size={20} weight="fill" />
             </DropdownMenu.ItemIndicator>
+
+            {!checked && (
+              <span className="dropdown-indicator"><Circle size={20} weight="bold" /></span>
+            )}
 
             Show Check
           </DropdownMenu.CheckboxItem>
 
-          <DropdownMenu.Item>
+          <DropdownMenu.Item
+            className="dropdown-item dropdown-checkbox-item">
             Bar
           </DropdownMenu.Item>
 
-          <DropdownMenu.Item>
+          <DropdownMenu.Item
+            className="dropdown-item dropdown-checkbox-item">
             Baz
           </DropdownMenu.Item>
         </DropdownMenu.Content>
