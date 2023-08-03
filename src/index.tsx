@@ -10,11 +10,12 @@ import {
   FeatureCollection,
   SearchHandler 
 } from './peripleo';
-import { 
-  Layer, 
+import {  
   LayerSwitcher,
   Map as MapLibreMap, 
   PulsingSelectionMarker, 
+  SearchResultsLayer,
+  StaticDataLayer,
   Zoom 
 } from './peripleo/maplibre';
 
@@ -63,14 +64,24 @@ export const App = () => {
             size={80} 
             rgb={[246, 112, 86]} />
 
-          <Layer 
+          <SearchResultsLayer 
             id="pleiades-places" 
             style={teiLayerStyle}
             toGeoJSON={toGeoJSON} />
 
           <Controls position="topright">
             <Zoom />
-            <LayerSwitcher />
+            
+            <LayerSwitcher
+              names={Array.from(layers.keys())}>
+
+              {Array.from(layers.keys()).map(name => (
+                <StaticDataLayer 
+                  key={name}
+                  data={layers.get(name)} />
+              ))}
+
+            </LayerSwitcher>
           </Controls>
         </MapLibreMap>
 

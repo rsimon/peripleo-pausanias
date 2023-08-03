@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useMap } from '../Map';
-import { SearchResult, SearchStatus, useSearch, useStore } from '../../state';
+import { useMap } from '../../Map';
+import { SearchResult, SearchStatus, useSearch, useStore } from '../../../state';
 import { FeatureCollection, Store } from 'src/peripleo/Types';
 
 const EMPTY_GEOJSON = {
@@ -8,7 +8,7 @@ const EMPTY_GEOJSON = {
   features: []
 };
 
-export interface LayerProps<T extends unknown> {
+export interface SearchResultsLayerProps<T extends unknown> {
 
   id: string;
 
@@ -18,7 +18,7 @@ export interface LayerProps<T extends unknown> {
 
 }
 
-export const Layer = <T extends unknown>(props: LayerProps<T>) => {
+export const SearchResultsLayer = <T extends unknown>(props: SearchResultsLayerProps<T>) => {
 
   const map = useMap();
 
