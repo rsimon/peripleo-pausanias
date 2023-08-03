@@ -78,6 +78,7 @@ export const App = () => {
               {Array.from(layers.keys()).map(name => (
                 <StaticDataLayer 
                   key={name}
+                  id={name}
                   data={layers.get(name)} />
               ))}
 
