@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Section } from './Section';
+import { renderHistogram } from './histogramRenderer';
+import { HistogramConfig } from './HistogramConfig';
 
 interface SectionNavigatorProps {
 
@@ -8,6 +10,8 @@ interface SectionNavigatorProps {
   width: number;
 
   height: number;
+
+  histogramConfig?: HistogramConfig;
 
 }
 
@@ -31,6 +35,12 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
       setSections(sections);
     }    
   }, [tei]);
+
+  useEffect(() => {
+    if (sections) {
+      renderHistogram(canvas.current, sections, props.histogramConfig);
+    }
+  }, [ sections /* currentIdx, props.filter, props.selected */ ]);
 
   return (
     <div className="p6o-teiview-histogram">
