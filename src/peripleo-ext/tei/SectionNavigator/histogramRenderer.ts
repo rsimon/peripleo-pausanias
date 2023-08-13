@@ -5,13 +5,17 @@ const DEFAULT_CONFIG: HistogramConfig = {
 
   backgroundColor: '#fff',
 
-  maxBars: 100
+  gap: 2,
+
+  maxBars: 120
 
 }
 
 const fillDefaults = (config: HistogramConfig) => ({
 
   backgroundColor: config.backgroundColor || DEFAULT_CONFIG.backgroundColor,
+
+  gap: config.gap || DEFAULT_CONFIG.gap,
 
   maxBars: config.maxBars || DEFAULT_CONFIG.maxBars
 
@@ -45,36 +49,30 @@ export const renderHistogram = (canvas: HTMLCanvasElement, sections: Section[], 
 
   const buckets = chunkArray(sections, sectionsPerBucket);
 
+  // Width of each bar (=one bucket) in pixels
+  const barWidth = Math.max(1, Math.round(canvas.width / (buckets.length - 1) - conf.gap));
+
   // Number of placenames in each bucket (1 or more sections!)
   const bucketValues = buckets.map(sections => sections.reduce((val, { placenames }) => val + placenames.length, 0));
 
-  // Highest bucket
+  // Highest bucket + Y-scaling factor
   const maxValue = Math.max(...bucketValues);
+  const k = canvas.height / maxValue;
 
   console.log(`${sections.length} sections. Drawing ${buckets.length} bars with ${sectionsPerBucket} sections each`);
-  console.log(`Maximum bucket value is ${maxValue}`);
+  console.log(`Bucket width in pixel: ${barWidth} (${conf.gap} gap)`);
+  // console.log(`Maximum bucket value is ${maxValue}`);
+
+  bucketValues.forEach((val, idx) => {
+    const height = val * k;
+
+    ctx.fillStyle = '#aaaaff';    
+    ctx.fillRect(idx * (barWidth + conf.gap), canvas.height - height, barWidth, height);
+  });
+
 
 
   /*
-  const bars = annotationsBySection.reduce((resampled, obj) => {
-    ctr += 1;
-    if (ctr < RESAMPLE) {
-      return [...resampled, obj ];
-    } else {
-      ctr = 0;
-
-      const head = [...resampled.slice(0, resampled.length - 1)];
-      const last = resampled[resampled.length - 1];
-      
-      const agg = {
-        section: last.section,
-        annotations: [...last.annotations, ...obj.annotations ]
-      };
-
-      return [ ...head, agg ];
-    }
-  }, []);
-
   // Draw bars
   bars.forEach((obj, idx) => {
     const { annotations } = obj;
