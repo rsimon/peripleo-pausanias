@@ -27,5 +27,5 @@
   border-radius: 0 0 var(--p6o-border-radius) var(--p6o-border-radius);
   border-top: 1px solid var(--p6o-section-border-light);
   padding: 10px 10px 0 10px;
-  height: 80px;
+  height: 60px;
 }

@@ -42,9 +42,6 @@ export const createRenderer = (canvas: HTMLCanvasElement, sections: Section[], c
 
   const ctx = canvas.getContext('2d');
 
-  ctx.fillStyle = conf.backgroundColor;
-  ctx.fillRect(0, 0, width, height);
-
   // console.log(sections);
 
   // Number of buckets to render as histogram bars
@@ -70,6 +67,9 @@ export const createRenderer = (canvas: HTMLCanvasElement, sections: Section[], c
   // console.log(`Maximum bucket value is ${maxValue}`);
 
   const render = (cursor: number = 0) => {
+    ctx.fillStyle = conf.backgroundColor;
+    ctx.fillRect(0, 0, width, height);
+  
     // Cursor number refers to the section. Determine
     // which bucket number this correpsonds to
     const cursorPosition = Math.round(cursor / sectionsPerBucket);
@@ -77,12 +77,16 @@ export const createRenderer = (canvas: HTMLCanvasElement, sections: Section[], c
     bucketValues.forEach((val, idx) => {
       const height = val * k;
 
-      ctx.fillStyle = idx === cursorPosition ? '#ff0000' : '#aaaaff';    
+      const gradient = ctx.createLinearGradient(
+        idx * (barWidth + conf.gap), canvas.height - height,
+        idx * (barWidth + conf.gap), canvas.height
+      );
+
+      gradient.addColorStop(0, 'rgba(170, 170, 255, 1)');   // Start with full opacity
+      gradient.addColorStop(1, 'rgba(170, 170, 255, 0.65)'); // End with 50% opacity
+
+      ctx.fillStyle = idx === cursorPosition ? '#ff0000' : gradient;
       ctx.fillRect(idx * (barWidth + conf.gap), canvas.height - height, barWidth, height);
-
-      if (idx === cursorPosition) {
-
-      }
     });
   }
 
