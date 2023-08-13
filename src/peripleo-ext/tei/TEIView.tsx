@@ -1,9 +1,9 @@
-import { MouseEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import CETEI from 'CETEIcean';
 import Switch from 'react-switch';
-import { useDebounce } from 'usehooks-ts';
-import { useSearch, useSelectionState, useSelectionValue, useStore } from '../../peripleo/state';
-import { useTrackViewport } from './useTrackViewport';
+import { useSearch } from '../../peripleo/state';
+import { TEITextView } from './TEITextView';
+import { SectionNavigator } from './SectionNavigator';
 
 import './TEIView.css';
 
@@ -37,77 +37,35 @@ export const TEIView = (props: TEIViewProps) => {
 
   const { clearFilter, getFilter, setFilter } = useSearch();
 
-  const [selection, setSelection] = useSelectionState();
-
-  const store = useStore();
-
-  const [visible, setVisible] = useState<Element[]>([]);
-
   const [showAll, setShowAll] = useState(false);
 
-  const debouncedVisible = useDebounce<Element[]>(visible, 20);
+  const [tei, setTEI] = useState<Element>(null);
 
-  const onViewportChange = ({ entered, left}) =>
-    setVisible(visible => ([
-      ...visible.filter(el => !left.includes(el)),
-      ...entered
-    ]));
-
-  const { ref, startTracking } = useTrackViewport<HTMLDivElement>({ onViewportChange });
+  const [inViewport, setInViewport] = useState<Element[]>([]);
 
   useEffect(() => {
     const CETEIcean = new CETEI();
 
-    CETEIcean.getHTML5(props.src, (data: Node) => {
-      ref.current.appendChild(data);
+    CETEIcean.getHTML5(props.src, (data: Element) => {
+      setTEI(data);
 
-      const placeNames = Array.from(document.querySelectorAll('tei-body tei-placename'));
-
-      startTracking(placeNames);
-
+      const placeNames = Array.from(data.querySelectorAll('tei-body tei-placename'));
       props.onLoad(placeNames);
     });
   }, []);
+
+  const onViewportChange = (placenames: Element[]) =>
+    setInViewport(placenames);
 
   useEffect(() => {
     if (showAll) {
       if (getFilter('visible-waypoints'))
         clearFilter('visible-waypoints');
     } else {
-      const ids = debouncedVisible.map(el => el.getAttribute('xml:id'));
+      const ids = inViewport.map(el => el.getAttribute('xml:id'));
       setFilter({ name: 'visible-waypoints', value: ids });
     }
-  }, [debouncedVisible, showAll]);
-
-  // Selection changed
-  useEffect(() => {
-    if (!store)
-      return;
-
-    deselect(ref.current);
-
-    if (!selection)
-      return; 
-
-    const toSelect = store.getItemsAt(selection.id);
-    toSelect.forEach(item => addClass(item.id, 'p6o-tei-selected'));
-  }, [ store, selection ]);
-
-  const onClick = (evt: MouseEvent) => {
-    const el = evt.target as Element;
-    const tagName = el?.tagName;
-
-    if (tagName === 'TEI-PLACENAME') {
-      deselect(ref.current);
-
-      const placeId = el.getAttribute('ref');
-      const place = placeId ? store.getPlaceById(placeId) : undefined;
-
-      setSelection(place);
-      
-      el.classList.add('p6o-tei-selected', 'p6o-tei-primary');
-    }
-  }
+  }, [inViewport, showAll]);
 
   return (
     <article className="p6o-teiview-container">
@@ -130,10 +88,16 @@ export const TEIView = (props: TEIViewProps) => {
         </div>
       </header>
 
-      <div 
-        ref={ref} 
-        className="p6o-tei-content"
-        onClick={onClick} />
+      <TEITextView 
+        tei={tei}
+        onViewportChange={onViewportChange} />
+
+      <footer>
+        <SectionNavigator
+          tei={tei}
+          width={640} 
+          height={120} />
+      </footer>
     </article>
   )
 
