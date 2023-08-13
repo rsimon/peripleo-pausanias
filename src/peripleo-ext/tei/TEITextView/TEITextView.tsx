@@ -1,5 +1,4 @@
 import { MouseEvent, useEffect, useState } from 'react';
-import { useDebounce } from 'usehooks-ts';
 import { useSelectionState, useStore } from '../../../peripleo/state';
 import { useTrackViewport } from './useTrackViewport';
 
@@ -37,8 +36,6 @@ export const TEITextView = (props: TEITextViewProps) => {
 
   const [visible, setVisible] = useState<Element[]>([]);
 
-  const debouncedVisible = useDebounce<Element[]>(visible, 20);
-
   const onViewportChange = ({ entered, left}) =>
     setVisible(visible => ([
       ...visible.filter(el => !left.includes(el)),
@@ -58,8 +55,8 @@ export const TEITextView = (props: TEITextViewProps) => {
 
   // Debounce viewport scroll event
   useEffect(() => {
-    props.onViewportChange(debouncedVisible);
-  }, [debouncedVisible, props.onViewportChange]);
+    props.onViewportChange(visible);
+  }, [visible, props.onViewportChange]);
 
   // Selection changed
   useEffect(() => {

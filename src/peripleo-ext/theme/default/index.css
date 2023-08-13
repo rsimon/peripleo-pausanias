@@ -21,3 +21,11 @@
 .p6o-tei-content {
   padding: 15px;
 }
+
+.p6o-teiview-histogram {
+  background-color: #fff;
+  border-radius: 0 0 var(--p6o-border-radius) var(--p6o-border-radius);
+  border-top: 1px solid var(--p6o-section-border-light);
+  padding: 10px 10px 0 10px;
+  height: 80px;
+}

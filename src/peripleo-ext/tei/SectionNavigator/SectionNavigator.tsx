@@ -3,15 +3,13 @@ import { Section } from './Section';
 import { createRenderer } from './histogramRenderer';
 import { HistogramConfig } from './HistogramConfig';
 
+import './SectionNavigator.css';
+
 interface SectionNavigatorProps {
 
   tei: Element;
 
   placesInViewport: Element[];
-
-  width: number;
-
-  height: number;
 
   histogramConfig?: HistogramConfig;
 
@@ -69,7 +67,7 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
 
   return (
     <div className="p6o-teiview-histogram">
-      <canvas ref={canvas} width={props.width} height={props.height} />
+      <canvas ref={canvas} />
     </div>
   )
 

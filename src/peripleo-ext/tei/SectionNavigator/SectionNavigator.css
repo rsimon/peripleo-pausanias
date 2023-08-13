@@ -1,0 +1,11 @@
+.p6o-teiview-histogram {
+  box-sizing: border-box;
+  position: relative;
+  width: 100%;
+}
+
+.p6o-teiview-histogram canvas {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
