@@ -6,4 +6,8 @@ export interface HistogramConfig {
 
   maxBars?: number;
 
+  rgba?: [number, number, number];
+
+  cursor: string;
+
 }

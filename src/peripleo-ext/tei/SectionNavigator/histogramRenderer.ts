@@ -7,18 +7,17 @@ const DEFAULT_CONFIG: HistogramConfig = {
 
   gap: 2,
 
-  maxBars: 120
+  maxBars: 120,
+
+  rgba: [151, 186, 242],
+
+  cursor: '#fb4040'
 
 }
 
-const fillDefaults = (config: HistogramConfig) => ({
-
-  backgroundColor: config.backgroundColor || DEFAULT_CONFIG.backgroundColor,
-
-  gap: config.gap || DEFAULT_CONFIG.gap,
-
-  maxBars: config.maxBars || DEFAULT_CONFIG.maxBars
-
+const fillDefaults = (config?: HistogramConfig) => ({
+  ...(config || {}),
+  ...DEFAULT_CONFIG
 });
 
 const chunkArray = <T extends unknown>(arr: T[], n: number): T[][] => {
@@ -32,7 +31,7 @@ const chunkArray = <T extends unknown>(arr: T[], n: number): T[][] => {
 }
 
 export const createRenderer = (canvas: HTMLCanvasElement, sections: Section[], config?: HistogramConfig) => {
-  const conf = fillDefaults(config || {});
+  const conf = fillDefaults(config);
 
   const width = 2 * canvas.offsetWidth;
   const height = 2 * canvas.offsetHeight;
@@ -82,10 +81,12 @@ export const createRenderer = (canvas: HTMLCanvasElement, sections: Section[], c
         idx * (barWidth + conf.gap), canvas.height
       );
 
-      gradient.addColorStop(0, 'rgba(170, 170, 255, 1)');   // Start with full opacity
-      gradient.addColorStop(1, 'rgba(170, 170, 255, 0.65)'); // End with 50% opacity
+      const [r, g, b] = conf.rgba;
 
-      ctx.fillStyle = idx === cursorPosition ? '#ff0000' : gradient;
+      gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, 1)`); 
+      gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0.65)`);
+
+      ctx.fillStyle = idx === cursorPosition ? conf.cursor : gradient;
       ctx.fillRect(idx * (barWidth + conf.gap), canvas.height - height, barWidth, height);
     });
   }
