@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { Section } from './Section';
-import { renderHistogram } from './histogramRenderer';
+import { createRenderer } from './histogramRenderer';
 import { HistogramConfig } from './HistogramConfig';
 
 interface SectionNavigatorProps {
 
   tei: Element;
+
+  placesInViewport: Element[];
 
   width: number;
 
@@ -23,6 +25,10 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
 
   const [sections, setSections] = useState<Section[]>([]); 
 
+  const [renderer, setRenderer] = useState<ReturnType<typeof createRenderer>>(null);
+
+  const [cursor, setCursor] = useState(-1);
+
   useEffect(() => {
     if (tei) {
       const divs = Array.from(tei.querySelectorAll('tei-div[subtype=section]'));
@@ -38,9 +44,28 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
 
   useEffect(() => {
     if (sections) {
-      renderHistogram(canvas.current, sections, props.histogramConfig);
+      const renderer = createRenderer(canvas.current, sections, props.histogramConfig);
+      setRenderer(renderer);
+      renderer.render();
     }
   }, [ sections /* currentIdx, props.filter, props.selected */ ]);
+
+  useEffect(() => {
+    if (renderer)
+      renderer.render(cursor);
+  }, [renderer, cursor]);
+
+  useEffect(() => {
+    // Put the cursor at the first section in the viewport
+    if (props.placesInViewport.length > 0) {
+      const [ first, ] = props.placesInViewport;
+
+      const section = first.closest('tei-div[subtype=section]');
+
+      const cursor = sections.findIndex(s => s.element === section);
+      setCursor(cursor); 
+    }
+  }, [ props.placesInViewport ]);
 
   return (
     <div className="p6o-teiview-histogram">

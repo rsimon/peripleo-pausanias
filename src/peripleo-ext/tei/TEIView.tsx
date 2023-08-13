@@ -96,7 +96,8 @@ export const TEIView = (props: TEIViewProps) => {
         <SectionNavigator
           tei={tei}
           width={640} 
-          height={120} />
+          height={120} 
+          placesInViewport={inViewport} />
       </footer>
     </article>
   )

@@ -31,7 +31,7 @@ const chunkArray = <T extends unknown>(arr: T[], n: number): T[][] => {
   return chunkedArrays;
 }
 
-export const renderHistogram = (canvas: HTMLCanvasElement, sections: Section[], config?: HistogramConfig) => {
+export const createRenderer = (canvas: HTMLCanvasElement, sections: Section[], config?: HistogramConfig) => {
   const conf = fillDefaults(config || {});
 
   const ctx = canvas.getContext('2d');
@@ -59,58 +59,27 @@ export const renderHistogram = (canvas: HTMLCanvasElement, sections: Section[], 
   const maxValue = Math.max(...bucketValues);
   const k = canvas.height / maxValue;
 
-  console.log(`${sections.length} sections. Drawing ${buckets.length} bars with ${sectionsPerBucket} sections each`);
-  console.log(`Bucket width in pixel: ${barWidth} (${conf.gap} gap)`);
+  // console.log(`${sections.length} sections. Drawing ${buckets.length} bars with ${sectionsPerBucket} sections each`);
+  // console.log(`Bucket width in pixel: ${barWidth} (${conf.gap} gap)`);
   // console.log(`Maximum bucket value is ${maxValue}`);
 
-  bucketValues.forEach((val, idx) => {
-    const height = val * k;
+  const render = (cursor: number = 0) => {
+    // Cursor number refers to the section. Determine
+    // which bucket number this correpsonds to
+    const cursorPosition = Math.round(cursor / sectionsPerBucket);
 
-    ctx.fillStyle = '#aaaaff';    
-    ctx.fillRect(idx * (barWidth + conf.gap), canvas.height - height, barWidth, height);
-  });
+    bucketValues.forEach((val, idx) => {
+      const height = val * k;
 
+      ctx.fillStyle = idx === cursorPosition ? '#ff0000' : '#aaaaff';    
+      ctx.fillRect(idx * (barWidth + conf.gap), canvas.height - height, barWidth, height);
 
+      if (idx === cursorPosition) {
 
-  /*
-  // Draw bars
-  bars.forEach((obj, idx) => {
-    const { annotations } = obj;
-    const count = annotations.length;
+      }
+    });
+  }
 
-    // Selection could be Feature or Annotation - get linked Feature, latter
-    const selectedFeature = props.selected?.asFeature();
-
-    if (props.filter || selectedFeature) {
-      let filteredCount;
-
-      if (props.filter && selectedFeature)
-        filteredCount = annotations
-          .filter(props.filter)
-          .filter(annotation => linksTo(annotation, selectedFeature.id))
-          .length;
-      else if (props.filter)
-        filteredCount = annotations.filter(props.filter).length;
-      else if (selectedFeature)
-        filteredCount = annotations
-          .filter(annotation => linksTo(annotation, selectedFeature.id))
-          .length;
-      else 
-        filteredCount = annotations.length;
-
-      // Transparent bars at full count
-      ctx.fillStyle = idx === currentIdx ? '#ffc0c0' : '#e4e4ff';    
-      ctx.fillRect(idx * (BAR_WIDTH + BAR_SPACING) + PADDING, HEIGHT - count * 1.8, BAR_WIDTH, count * 1.8);
-
-      // Full-color bars at filtered count
-      ctx.fillStyle = idx === currentIdx ? '#ff0000' : '#9999ff';    
-      ctx.fillRect(idx * (BAR_WIDTH + BAR_SPACING) + PADDING, HEIGHT - filteredCount * 1.8, BAR_WIDTH, filteredCount * 1.8);
-    } else {
-      ctx.fillStyle = idx === currentIdx ? '#ff0000' : '#aaaaff';    
-      ctx.fillRect(idx * (BAR_WIDTH + BAR_SPACING) + PADDING, HEIGHT - count * 1.8, BAR_WIDTH, count * 1.8);
-    }
-
-  });
-  */
+  return { render };
 
 }
