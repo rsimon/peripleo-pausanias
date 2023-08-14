@@ -59,7 +59,7 @@ input {
 button {
   background-color: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: 7px;
   cursor: pointer;
   padding: 4px 8px;
   transition: background-color 150ms;
