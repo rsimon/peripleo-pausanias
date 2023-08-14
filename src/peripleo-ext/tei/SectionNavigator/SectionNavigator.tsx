@@ -68,6 +68,17 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
     }
   }, [ props.placesInViewport ]);
 
+  const onHistogramClicked = (evt: React.MouseEvent) => {
+    const { x, y } = (evt.target as Element).getBoundingClientRect();
+
+    const offsetX = evt.clientX - x;
+    const offsetY = evt.clientY - y;
+
+    // TODO add a function to renderer that resolves this to a 
+    // section, and then get chapter/section from the sections
+    console.log(offsetX, offsetY);
+  } 
+
   const onJumpTo = ({ chapter, section }) => {
     const chapterEl = tei.querySelector(`tei-div[subtype="chapter"][n="${chapter}"]`);
     if (chapterEl) {
@@ -82,7 +93,7 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
   return (
     <div className="p6o-teiview-nav">
       <div className="p6o-teiview-histogram">
-        <canvas ref={canvas} />
+        <canvas ref={canvas} onClick={onHistogramClicked} />
       </div>
 
       <div className="p6o-teiview-nav-bottom">
