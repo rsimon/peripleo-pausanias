@@ -43,6 +43,7 @@
   border-radius: 8px;
   cursor: pointer;
   padding: 4px 8px;
+  transition: background-color 150ms;
 }
 
 .p6o-teiview-nav-picker button:hover {

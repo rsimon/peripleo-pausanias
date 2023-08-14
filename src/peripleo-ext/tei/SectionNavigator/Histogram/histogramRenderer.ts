@@ -1,5 +1,5 @@
 import { HistogramConfig } from './HistogramConfig';
-import { Section } from './Section';
+import { Section } from '../Section';
 
 const DEFAULT_CONFIG: HistogramConfig = {
 

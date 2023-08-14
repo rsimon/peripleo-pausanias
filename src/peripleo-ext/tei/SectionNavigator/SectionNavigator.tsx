@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { ListBullets } from '@phosphor-icons/react';
 import { Section } from './Section';
-import { createRenderer } from './histogramRenderer';
-import { HistogramConfig } from './HistogramConfig';
+import { HistogramConfig, createRenderer } from './Histogram';
+import { SectionPicker } from './SectionPicker';
 
 import './SectionNavigator.css';
 
@@ -30,19 +29,6 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
 
   const totalPlaces = sections.reduce((count, { placenames }) =>
     count + placenames.length, 0);
-
-  const getSectionNumber = () => {
-    const currentSection = cursor > -1 ? sections[cursor] : undefined;
-    if (!currentSection)
-      return '';
-
-    const { element } = currentSection;
-
-    const chapter = element.parentElement.getAttribute('n');
-    const section = element.getAttribute('n');
-
-    return `${chapter}.${section}`;
-  }
 
   useEffect(() => {
     if (tei) {
@@ -89,11 +75,9 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
       </div>
 
       <div className="p6o-teiview-nav-bottom">
-        <div className="p6o-teiview-nav-picker">
-          <button>
-            Section {getSectionNumber()} <ListBullets size={16} />
-          </button>
-        </div>
+        <SectionPicker 
+          cursor={cursor}
+          sections={sections } />
 
         <div className="p6o-teiview-total">
           {totalPlaces.toLocaleString('en')} Place References
