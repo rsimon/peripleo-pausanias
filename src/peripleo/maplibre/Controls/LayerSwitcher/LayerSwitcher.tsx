@@ -4,6 +4,8 @@ import { CheckCircle, Circle, Stack } from '@phosphor-icons/react';
 
 interface LayerSwitcherProps {
 
+  title?: string;
+
   children: ReactNode;
 
   names: string[];
@@ -44,7 +46,7 @@ export const LayerSwitcher = (props: LayerSwitcherProps) => {
         <DropdownMenu.Portal>
           <DropdownMenu.Content side="left" sideOffset={8} className="dropdown-content">
             <DropdownMenu.Label className="dropdown-label">
-              Map Layers
+              {props.title || 'Layers'}
             </DropdownMenu.Label>
 
             <DropdownMenu.Separator className="dropdown-separator" />
