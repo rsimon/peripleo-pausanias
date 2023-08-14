@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { ListBullets } from '@phosphor-icons/react';
 import { Section } from './Section';
 import { createRenderer } from './histogramRenderer';
 import { HistogramConfig } from './HistogramConfig';
@@ -89,7 +90,9 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
 
       <div className="p6o-teiview-nav-bottom">
         <div className="p6o-teiview-nav-picker">
-          Section {getSectionNumber()}
+          <button>
+            Section {getSectionNumber()} <ListBullets size={16} />
+          </button>
         </div>
 
         <div className="p6o-teiview-total">

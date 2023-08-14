@@ -34,5 +34,17 @@
 
 .p6o-teiview-nav-bottom {
   font-size: 13px;
-  padding: 10px 12px 8px 12px;
+  padding: 5px 12px 5px 5px;
+}
+
+.p6o-teiview-nav-picker button {
+  background-color: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.p6o-teiview-nav-picker button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
 }

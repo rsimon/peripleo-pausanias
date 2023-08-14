@@ -10,7 +10,12 @@
 }
 
 .p6o-teiview-nav-bottom {
+  align-items: center;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.p6o-teiview-nav-picker svg {
+  vertical-align: bottom;
 }
