@@ -22,10 +22,17 @@
   padding: 15px;
 }
 
-.p6o-teiview-histogram {
+.p6o-teiview-nav {
+  border-top: 1px solid var(--p6o-section-border-light);
   background-color: #fff;
   border-radius: 0 0 var(--p6o-border-radius) var(--p6o-border-radius);
-  border-top: 1px solid var(--p6o-section-border-light);
+}
+.p6o-teiview-histogram {
   padding: 10px 10px 0 10px;
   height: 60px;
+}
+
+.p6o-teiview-nav-bottom {
+  font-size: 13px;
+  padding: 10px 12px 8px 12px;
 }

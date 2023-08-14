@@ -27,6 +27,22 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
 
   const [cursor, setCursor] = useState(-1);
 
+  const totalPlaces = sections.reduce((count, { placenames }) =>
+    count + placenames.length, 0);
+
+  const getSectionNumber = () => {
+    const currentSection = cursor > -1 ? sections[cursor] : undefined;
+    if (!currentSection)
+      return '';
+
+    const { element } = currentSection;
+
+    const chapter = element.parentElement.getAttribute('n');
+    const section = element.getAttribute('n');
+
+    return `${chapter}.${section}`;
+  }
+
   useEffect(() => {
     if (tei) {
       const divs = Array.from(tei.querySelectorAll('tei-div[subtype=section]'));
@@ -66,8 +82,20 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
   }, [ props.placesInViewport ]);
 
   return (
-    <div className="p6o-teiview-histogram">
-      <canvas ref={canvas} />
+    <div className="p6o-teiview-nav">
+      <div className="p6o-teiview-histogram">
+        <canvas ref={canvas} />
+      </div>
+
+      <div className="p6o-teiview-nav-bottom">
+        <div className="p6o-teiview-nav-picker">
+          Section {getSectionNumber()}
+        </div>
+
+        <div className="p6o-teiview-total">
+          {totalPlaces.toLocaleString('en')} Place References
+        </div>
+      </div>
     </div>
   )
 

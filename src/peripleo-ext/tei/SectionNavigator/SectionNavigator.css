@@ -1,5 +1,4 @@
-.p6o-teiview-histogram {
-  box-sizing: border-box;
+.p6o-teiview-nav {
   position: relative;
   width: 100%;
 }
@@ -8,4 +7,10 @@
   display: block;
   height: 100%;
   width: 100%;
+}
+
+.p6o-teiview-nav-bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
