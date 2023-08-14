@@ -73,7 +73,7 @@ export const TEIView = (props: TEIViewProps) => {
         <h1>{props.title}</h1>
 
         <div className="p6o-teiview-mode-switch">
-          <span>All Places</span>
+          <span>Map all places</span>
 
           <Switch 
             height={18}
@@ -84,7 +84,7 @@ export const TEIView = (props: TEIViewProps) => {
             uncheckedIcon={false}
             checked={!showAll}
             onChange={checked => setShowAll(!checked)} />
-          <span>Places in View</span>
+          <span>Text window</span>
         </div>
       </header>
 
