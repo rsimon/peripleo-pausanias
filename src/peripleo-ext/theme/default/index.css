@@ -27,6 +27,7 @@
   background-color: #fff;
   border-radius: 0 0 var(--p6o-border-radius) var(--p6o-border-radius);
 }
+
 .p6o-teiview-histogram {
   padding: 10px 10px 0 10px;
   height: 60px;
@@ -37,15 +38,30 @@
   padding: 5px 12px 5px 5px;
 }
 
-.p6o-teiview-nav-picker button {
-  background-color: transparent;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  padding: 4px 8px;
-  transition: background-color 150ms;
+.p6o-teiview-nav-picker-popover, 
+.p6o-teiview-nav-picker-popover input {
+  font-size: 13px;
 }
 
-.p6o-teiview-nav-picker button:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+.p6o-teiview-nav-picker-popover .field {
+  align-items: center;
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  padding-top: 5px;
 }
+
+.p6o-teiview-nav-picker-popover button {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  height: 28px;
+  justify-content: center;
+  padding: 0;
+  width: 28px;
+}
+
+.p6o-teiview-nav-picker-popover button:hover {
+  background-color: rgba(0, 0, 0, 0.16);
+}
+

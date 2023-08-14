@@ -68,6 +68,17 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
     }
   }, [ props.placesInViewport ]);
 
+  const onJumpTo = ({ chapter, section }) => {
+    const chapterEl = tei.querySelector(`tei-div[subtype="chapter"][n="${chapter}"]`);
+    if (chapterEl) {
+      const sectionEl = chapterEl.querySelector(`tei-div[subtype="section"][n="${section}"]`);
+      if (sectionEl) {
+        window.setTimeout(() => 
+          sectionEl.scrollIntoView({ behavior: 'smooth' }), 1);
+      }
+    }
+  }
+
   return (
     <div className="p6o-teiview-nav">
       <div className="p6o-teiview-histogram">
@@ -77,7 +88,8 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
       <div className="p6o-teiview-nav-bottom">
         <SectionPicker 
           cursor={cursor}
-          sections={sections } />
+          sections={sections} 
+          onJumpTo={onJumpTo}/>
 
         <div className="p6o-teiview-total">
           {totalPlaces.toLocaleString('en')} Place References

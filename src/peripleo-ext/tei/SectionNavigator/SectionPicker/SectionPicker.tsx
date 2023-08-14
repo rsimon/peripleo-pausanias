@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
-import { ListBullets } from '@phosphor-icons/react';
+import { ArrowRight, ListBullets } from '@phosphor-icons/react';
 import { Section } from '../Section';
 
 import './SectionPicker.css';
+import { FormEvent } from 'react';
 
 interface SectionPickerProps {
 
@@ -10,11 +12,17 @@ interface SectionPickerProps {
 
   cursor: number;
 
+  onJumpTo(arg: { chapter: number, section: number }): void;
+
 }
 
 export const SectionPicker = (props: SectionPickerProps) => {
 
   const { cursor, sections } = props;
+
+  const [open, setOpen] = useState(false);
+
+  const [invalid, setInvalid] = useState(false);
 
   const getSectionNumber = () => {
     const currentSection = cursor > -1 ? sections[cursor] : undefined;
@@ -29,9 +37,28 @@ export const SectionPicker = (props: SectionPickerProps) => {
     return `${chapter}.${section}`;
   }
 
+  const onSubmit = (evt: FormEvent) => {
+    evt.preventDefault();
+
+    const str = (evt.target as HTMLFormElement).elements['section'].value;
+    if (!str)
+      return;
+
+    const isValid = /^\d+\.\d+$/.test(str);
+    if (isValid) {
+      setInvalid(false);
+
+      const [ chapter, section ] = str.split('.');
+      props.onJumpTo({ chapter, section });
+      setOpen(false);
+    } else {
+      setInvalid(true);
+    }
+  }
+
   return (
     <div className="p6o-teiview-nav-picker">
-      <Popover.Root>
+      <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger asChild>
           <button>
             Section {getSectionNumber()} <ListBullets   size={16} />
@@ -39,14 +66,26 @@ export const SectionPicker = (props: SectionPickerProps) => {
         </Popover.Trigger>
 
         <Popover.Portal>
-          <Popover.Content className="popover-content" align="start" sideOffset={10}>
-            <form>
+          <Popover.Content className="p6o-teiview-nav-picker-popover popover-content" align="start" sideOffset={10}>
+            <form onSubmit={onSubmit}>
               <fieldset>
                 <label className="Label" htmlFor="width">
                   Jump to Section
                 </label>
 
-                <input id="to-section" />
+                <div className="field">
+                  <input id="section" name="section" />
+
+                  <button className="round">
+                    <ArrowRight size={16} />
+                  </button>
+                </div>
+
+                {invalid && (
+                  <div className="field-error">
+                    Invalid input. E.g. 2.4.
+                  </div>
+                )}
               </fieldset>
             </form>
 
