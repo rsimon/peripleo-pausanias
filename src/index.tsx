@@ -1,7 +1,13 @@
 import { useEffect, useState } from 'react'; 
 import { createRoot } from 'react-dom/client';
 import { TEIView } from './peripleo-ext';
-import { importTEITrace, teiLayerStyle, onSearch, toGeoJSON } from './pausanias';
+import { 
+  FilterByTagControl,
+  importTEITrace, 
+  teiLayerStyle, 
+  onSearch, 
+  toGeoJSON
+} from './pausanias';
 import { 
   Peripleo,
   BrowserStore, 
@@ -71,6 +77,8 @@ export const App = () => {
 
           <Controls position="topright">
             <Zoom />
+
+            <FilterByTagControl />
             
             <LayerSwitcher
               names={Array.from(layers.keys())}>
