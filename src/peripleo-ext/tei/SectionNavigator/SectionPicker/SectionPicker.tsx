@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
-import { ArrowRight, ListBullets } from '@phosphor-icons/react';
+import { ArrowRight, BookOpenText } from '@phosphor-icons/react';
 import { Section } from '../Section';
 
 import './SectionPicker.css';
@@ -61,7 +61,7 @@ export const SectionPicker = (props: SectionPickerProps) => {
       <Popover.Root open={open} onOpenChange={setOpen}>
         <Popover.Trigger asChild>
           <button>
-            Section {getSectionNumber()} <ListBullets   size={16} />
+            <BookOpenText size={16} /> {getSectionNumber()} 
           </button>
         </Popover.Trigger>
 

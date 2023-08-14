@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'; 
 import { createRoot } from 'react-dom/client';
 import { TEIView } from './peripleo-ext';
-import { 
-  FilterByTagControl,
+import {
   importTEITrace, 
   teiLayerStyle, 
   onSearch, 
@@ -84,8 +83,6 @@ export const App = () => {
           <Controls position="topright">
             <Zoom />
 
-            <FilterByTagControl tei={tei} />
-            
             <LayerSwitcher
               names={Array.from(layers.keys())}>
 
@@ -95,7 +92,6 @@ export const App = () => {
                   id={name}
                   data={layers.get(name)} />
               ))}
-
             </LayerSwitcher>
           </Controls>
         </MapLibreMap>

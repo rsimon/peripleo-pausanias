@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Section } from './Section';
 import { HistogramConfig, createRenderer } from './Histogram';
 import { SectionPicker } from './SectionPicker';
+import { TagFilter } from './TagFilter';
 
 import './SectionNavigator.css';
 
@@ -26,9 +27,6 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
   const [renderer, setRenderer] = useState<ReturnType<typeof createRenderer>>(null);
 
   const [cursor, setCursor] = useState(-1);
-
-  const totalPlaces = sections.reduce((count, { placenames }) =>
-    count + placenames.length, 0);
 
   useEffect(() => {
     if (tei) {
@@ -102,9 +100,8 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
           sections={sections} 
           onJumpTo={onJumpTo}/>
 
-        <div className="p6o-teiview-total">
-          {totalPlaces.toLocaleString('en')} Place References
-        </div>
+        <TagFilter 
+          placesInViewport={props.placesInViewport} />
       </div>
     </div>
   )
