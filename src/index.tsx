@@ -32,6 +32,8 @@ export const App = () => {
 
   const MAP_STYLE = document.querySelector('meta[name="map.style"]')?.getAttribute('content');
 
+  const [tei, setTEI] = useState<Element | undefined>(undefined);
+
   const [places, setPlaces] = useState([]);
 
   const [trace, setTrace] = useState(null);
@@ -51,8 +53,12 @@ export const App = () => {
         new Map(map).set('ASCSA Monuments', geojson as FeatureCollection)))
   }, []);
 
-  const onTEILoaded = (placeNames: Element[]) =>
+  const onTEILoaded = (tei: Element) => {
+    setTEI(tei);
+
+    const placeNames = Array.from(tei.querySelectorAll('tei-body tei-placename'));
     setTrace(importTEITrace('Pausanias', placeNames));
+  }
 
   return (
     <Peripleo>
@@ -78,7 +84,7 @@ export const App = () => {
           <Controls position="topright">
             <Zoom />
 
-            <FilterByTagControl />
+            <FilterByTagControl tei={tei} />
             
             <LayerSwitcher
               names={Array.from(layers.keys())}>

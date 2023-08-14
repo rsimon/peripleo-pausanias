@@ -13,7 +13,7 @@ interface TEIViewProps {
 
   src: string;
 
-  onLoad(placeNames: Element[]): void;
+  onLoad(tei: Element): void;
 
 }
 
@@ -48,9 +48,7 @@ export const TEIView = (props: TEIViewProps) => {
 
     CETEIcean.getHTML5(props.src, (data: Element) => {
       setTEI(data);
-
-      const placeNames = Array.from(data.querySelectorAll('tei-body tei-placename'));
-      props.onLoad(placeNames);
+      props.onLoad(data);
     });
   }, []);
 
