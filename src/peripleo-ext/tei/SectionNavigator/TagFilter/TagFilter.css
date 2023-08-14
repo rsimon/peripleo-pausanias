@@ -1,3 +1,13 @@
 .p6o-teiview-tags .more-tags-badge {
-
+  display: inline-flex;
+  height: 16px;
+  font-size: 11px;
+  color: #fff;
+  font-weight: 600;
+  justify-content: center;
+  background: var(--p6o-text-color);
+  align-items: center;
+  border-radius: 9999px;
+  padding: 2px 8px 1px 8px;
+  margin-left: 3px;
 }
