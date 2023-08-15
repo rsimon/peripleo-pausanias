@@ -1,13 +1,15 @@
-.p6o-teiview-tags .more-tags-badge {
-  display: inline-flex;
-  height: 16px;
-  font-size: 11px;
+.p6o-teiview-tags button {
+  margin-left: -2px;
+  padding: 4px 6px;
+}
+
+.p6o-teiview-tags button.pinned svg {
+  vertical-align: text-top;
+  transform: scaleX(0.8);
+}
+
+.p6o-teiview-tags button.pinned {
   color: #fff;
-  font-weight: 600;
-  justify-content: center;
-  background: var(--p6o-text-color);
-  align-items: center;
-  border-radius: 9999px;
-  padding: 2px 8px 1px 8px;
-  margin-left: 3px;
+  background-color: var(--p6o-text-color);
+  margin: 0 4px;
 }

@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { CaretDown, PushPinSimple } from '@phosphor-icons/react';
+
 import './TagFilter.css';
 
 interface TagFilterProps {
@@ -14,8 +17,6 @@ const getUniqueSortedByOccurrences = (arr: string[]) => {
   
   const occurrencePairs = Object.entries(occurrences);
 
-  console.log(occurrences);
-  
   occurrencePairs.sort((a, b) => b[1] - a[1]);
   const sortedUniqueStrings = occurrencePairs.map(pair => pair[0]);
   
@@ -23,6 +24,11 @@ const getUniqueSortedByOccurrences = (arr: string[]) => {
 }
 
 export const TagFilter = (props: TagFilterProps) => {
+
+  const [pinned, setPinned] = useState<string | undefined>();
+
+  const togglePin = (tag: string) => () => 
+    setPinned(current => current === tag ? undefined : tag);
 
   const tags = props.placesInViewport.reduce((tags, placeName) => {
     const ana = placeName
@@ -41,13 +47,19 @@ export const TagFilter = (props: TagFilterProps) => {
 
   return (
     <div className="p6o-teiview-tags">
-      <button>
-        {first.join(' ')} {unique.length > 2 && (
-          <span className="more-tags-badge">
-            + {unique.length - 2}
-          </span>
-        )}
-      </button>
+      {first.map(tag => (
+        <button 
+          className={pinned === tag ? 'pinned' : undefined}
+          onClick={togglePin(tag)}>
+          {pinned === tag && (
+            <PushPinSimple size={14} weight="fill" />
+          )} {tag}
+        </button>
+      ))} {unique.length > 2 && (
+        <button className="more-tags">
+          <CaretDown size={10} weight="bold" /> {unique.length - 2} more
+        </button>
+      )}
     </div>
   )
 
