@@ -1,6 +1,7 @@
 import { HistogramConfig } from './HistogramConfig';
 import { Section } from '../Section';
 import { Filter } from 'src/peripleo/state';
+import { Feature } from 'src/peripleo/Types';
 
 const DEFAULT_CONFIG: HistogramConfig = {
 
@@ -30,6 +31,8 @@ const chunkArray = <T extends unknown>(arr: T[], n: number): T[][] => {
 
   return chunkedArrays;
 }
+
+const normalizedURI = (uri?: string) => uri && uri.replace('https', 'http');
 
 export const createRenderer = (canvas: HTMLCanvasElement, sections: Section[], config?: HistogramConfig) => {
   const conf = fillDefaults(config);
@@ -63,20 +66,25 @@ export const createRenderer = (canvas: HTMLCanvasElement, sections: Section[], c
   const k = height / maxValue;
 
   // Filters the count for bucket with the given index by tag
-  const filterBucketByTag = (idx: number, tag: string) =>
+  const filterBucket = (idx: number, tag?: string, placeId?: string) =>
     buckets[idx].reduce((count, section) => {
-      const elementsWithTag = section.placenames
-        .filter(el => el.getAttribute('ana')?.includes(tag))
+      const filteredByTag = tag ? 
+        section.placenames.filter(el => el.getAttribute('ana')?.includes(tag)) : 
+        section.placenames;
 
-      return count + elementsWithTag.length;
+      const filteredByPlace = placeId ? 
+        filteredByTag.filter(el => normalizedURI(el.getAttribute('ref')) === placeId) :
+        filteredByTag;
+
+      return count + filteredByPlace.length;
     }, 0);
 
   // console.log(`${sections.length} sections. Drawing ${buckets.length} bars with ${sectionsPerBucket} sections each`);
   // console.log(`Bucket width in pixel: ${barWidth} (${conf.gap} gap)`);
   // console.log(`Maximum bucket value is ${maxValue}`);
 
-  const render = (cursor: number = 0, filters: Filter[] = []) => {
-    const filterByTag = filters.find(f => f.name === 'tag')?.value;
+  const render = (cursor: number = 0, filters: Filter[] = [], place?: Feature) => {
+    const filterByTag: string | undefined = filters.find(f => f.name === 'tag')?.value;
 
     ctx.fillStyle = conf.backgroundColor;
     ctx.fillRect(0, 0, width, height);
@@ -102,13 +110,13 @@ export const createRenderer = (canvas: HTMLCanvasElement, sections: Section[], c
         return gradient;
       };
 
-      if (filterByTag) {
+      if (filterByTag || place) {
         // Semi-transparent bars with full height
         ctx.fillStyle =`rgba(${r}, ${g}, ${b}, 0.3)`;
         ctx.fillRect(idx * (barWidth + conf.gap), canvas.height - height, barWidth, height);  
 
         // Full-color bars at filtered height
-        const filteredHeight = filterBucketByTag(idx, filterByTag);
+        const filteredHeight = filterBucket(idx, filterByTag, place?.id);
 
         if (filteredHeight > 0 || cursorPosition === idx) {
           ctx.fillStyle = idx === cursorPosition ? conf.cursor : createGradient(filteredHeight);
