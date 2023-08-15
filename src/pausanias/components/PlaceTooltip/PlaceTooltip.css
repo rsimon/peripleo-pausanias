@@ -1,0 +1,12 @@
+.pausanias-place-tooltip {
+  background-color: var(--p6o-text-color);
+  border-radius: calc(var(--p6o-border-radius) - 4px);
+  color: #fff;
+  font-size: 1.1em;
+  font-weight: 500;
+  letter-spacing: 0.08ch;
+  min-width: 60px;
+  padding: 5px 8px;
+  text-align: center;
+  transform: translate(0, -10px);
+}

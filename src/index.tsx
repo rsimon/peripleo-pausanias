@@ -5,7 +5,8 @@ import {
   importTEITrace, 
   teiLayerStyle, 
   onSearch, 
-  toGeoJSON
+  toGeoJSON,
+  PlaceTooltip
 } from './pausanias';
 import { 
   Peripleo,
@@ -69,7 +70,7 @@ export const App = () => {
 
         <MapLibreMap 
           style={MAP_STYLE}
-          popup={props => <div>HelloWorld</div>}>
+          popup={props => <PlaceTooltip {...props} />}>
 
           <PulsingSelectionMarker 
             duration={1000}
