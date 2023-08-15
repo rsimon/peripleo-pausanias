@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import { PopupProps } from './PopupProps';
 import { moveIntoView } from './moveIntoView';
+import { LngLatLike } from 'maplibre-gl';
 
 export type PopupContainerProps = PopupProps & {
 
@@ -26,7 +27,7 @@ export const PopupContainer = (props: PopupContainerProps) => {
       // @ts-ignore
       const { coordinates } = selected.geometry;
   
-      const xy = map.project(coordinates);
+      const xy = map.project(coordinates as LngLatLike);
   
       const { height } = map._container.getBoundingClientRect();  
 
@@ -52,7 +53,7 @@ export const PopupContainer = (props: PopupContainerProps) => {
     <div
       ref={el}
       className="p6o-popup-container">
-      {popup(rest)}
+      {selected ? popup(rest) : null}
     </div>
   )
 

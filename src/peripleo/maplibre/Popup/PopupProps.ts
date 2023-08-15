@@ -1,10 +1,11 @@
-import { Map, MapGeoJSONFeature } from 'maplibre-gl';
+import { Map } from 'maplibre-gl';
+import { Feature } from '../../Types';
 
 export interface PopupProps {
 
   map: Map,
 
-  selected: MapGeoJSONFeature,
+  selected: Feature,
 
   onClose: () => void
 

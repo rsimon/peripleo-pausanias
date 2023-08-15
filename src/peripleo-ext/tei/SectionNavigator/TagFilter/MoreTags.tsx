@@ -32,7 +32,7 @@ export const MoreTags = (props: MoreTagsProps) => {
         <Popover.Content className="p6o-more-tags-popover popover-content" align="start" sideOffset={10}>
           <ul>
             {tags.map(tag => (
-              <li>
+              <li key={tag}>
                 <button 
                   className={pinned === tag ? 'pinned' : undefined}
                   onClick={() => onTogglePin(tag)}>{tag}</button>

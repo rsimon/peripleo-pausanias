@@ -68,7 +68,8 @@ export const App = () => {
         <SearchHandler onSearch={onSearch} />
 
         <MapLibreMap 
-          style={MAP_STYLE}>
+          style={MAP_STYLE}
+          popup={props => <div>HelloWorld</div>}>
 
           <PulsingSelectionMarker 
             duration={1000}

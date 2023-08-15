@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { MapGeoJSONFeature, Map as MapLibre, MapMouseEvent, PointLike, LngLatBoundsLike } from 'maplibre-gl';
+import { Map as MapLibre, MapMouseEvent, PointLike, LngLatBoundsLike } from 'maplibre-gl';
 import { MapContext } from './MapContext';
 import { MapProps } from './MapProps';
 import { PopupContainer } from '../Popup';
-import { SearchStatus, useSearch, useSelectionState } from '../../state';
+import { SearchStatus, useSearch, useSelectionState, useStore } from '../../state';
+import { Feature } from '../../Types';
 
 import 'maplibre-gl/dist/maplibre-gl.css';
 
@@ -14,12 +15,14 @@ export const Map = (props: MapProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   const { search } = useSearch();
+  
+  const store = useStore();
 
   const [map, setMap] = useState<MapLibre>(null);
 
   const [loaded, setLoaded] = useState(false);
 
-  const [selected, setSelected] = useSelectionState<MapGeoJSONFeature>();
+  const [selected, setSelected] = useSelectionState();
 
   const onMapClicked = (evt: MapMouseEvent) => {
     const map = evt.target;
@@ -33,11 +36,13 @@ export const Map = (props: MapProps) => {
       // @ts-ignore
       .filter(feature => feature.layer.metadata?.interactive);
 
-    if (features.length > 0)
+    if (features.length > 0) {
       // TODO pick feature with smallest area?
-      setSelected(features[0]);
-    else 
+      const place = store.getPlaceById(features[0].properties.id);
+      setSelected(place);
+    } else {
       setSelected(null);
+    }
   };
 
   useEffect(() => {
