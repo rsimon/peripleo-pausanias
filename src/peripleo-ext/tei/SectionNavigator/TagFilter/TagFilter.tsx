@@ -53,11 +53,16 @@ export const TagFilter = (props: TagFilterProps) => {
 
   const unique = getUniqueSortedByOccurrences(tags);
 
+  // Always keep the pinned tag displayed
   const first = unique.slice(0, 2);
+
+  const displayed = pinned ? 
+    first.includes(pinned) ? first : [ pinned, first[0] ] : 
+    first;
 
   return (
     <div className="p6o-teiview-tags">
-      {first.map(tag => (
+      {displayed.map(tag => (
         <button key={tag}
           className={pinned === tag ? 'pinned' : undefined}
           onClick={togglePin(tag)}>
@@ -65,7 +70,7 @@ export const TagFilter = (props: TagFilterProps) => {
             <PushPinSimple size={14} weight="fill" />
           )} {tag}
         </button>
-      ))} {unique.length > 2 && (
+      ))} {unique.length > first.length && (
         <button className="more-tags">
           <CaretDown size={10} weight="bold" /> {unique.length - 2} more
         </button>
