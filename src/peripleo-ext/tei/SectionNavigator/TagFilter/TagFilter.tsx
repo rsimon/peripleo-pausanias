@@ -3,6 +3,7 @@ import { CaretDown, PushPinSimple } from '@phosphor-icons/react';
 import { useSearch } from '../../../../peripleo/state';
 
 import './TagFilter.css';
+import { MoreTags } from './MoreTags';
 
 interface TagFilterProps {
 
@@ -30,7 +31,7 @@ export const TagFilter = (props: TagFilterProps) => {
 
   const [pinned, setPinned] = useState<string | undefined>();
 
-  const togglePin = (tag: string) => () => {
+  const togglePin = (tag: string) => {
     if (pinned === tag) {
       clearFilter('tag');
       setPinned(undefined);
@@ -65,15 +66,16 @@ export const TagFilter = (props: TagFilterProps) => {
       {displayed.map(tag => (
         <button key={tag}
           className={pinned === tag ? 'pinned' : undefined}
-          onClick={togglePin(tag)}>
+          onClick={() => togglePin(tag)}>
           {pinned === tag && (
             <PushPinSimple size={14} weight="fill" />
           )} {tag}
         </button>
       ))} {unique.length > first.length && (
-        <button className="more-tags">
-          <CaretDown size={10} weight="bold" /> {unique.length - 2} more
-        </button>
+        <MoreTags 
+          tags={unique} 
+          pinned={pinned} 
+          onTogglePin={togglePin} />
       )}
     </div>
   )
