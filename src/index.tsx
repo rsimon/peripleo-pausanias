@@ -70,7 +70,9 @@ export const App = () => {
 
         <MapLibreMap 
           style={MAP_STYLE}
-          popup={props => <PlaceTooltip {...props} />}>
+          popup={props => (
+            <PlaceTooltip {...props} />
+          )}>
 
           <PulsingSelectionMarker 
             duration={1000}
