@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CaretDown, PushPinSimple } from '@phosphor-icons/react';
+import { useSearch } from '../../../../peripleo/state';
 
 import './TagFilter.css';
 
@@ -25,10 +26,19 @@ const getUniqueSortedByOccurrences = (arr: string[]) => {
 
 export const TagFilter = (props: TagFilterProps) => {
 
+  const { clearFilter, setFilter } = useSearch();
+
   const [pinned, setPinned] = useState<string | undefined>();
 
-  const togglePin = (tag: string) => () => 
-    setPinned(current => current === tag ? undefined : tag);
+  const togglePin = (tag: string) => () => {
+    if (pinned === tag) {
+      clearFilter('tag');
+      setPinned(undefined);
+    } else {
+      setFilter({ name: 'tag', value: tag });
+      setPinned(tag);
+    }
+  }
 
   const tags = props.placesInViewport.reduce((tags, placeName) => {
     const ana = placeName
@@ -48,7 +58,7 @@ export const TagFilter = (props: TagFilterProps) => {
   return (
     <div className="p6o-teiview-tags">
       {first.map(tag => (
-        <button 
+        <button key={tag}
           className={pinned === tag ? 'pinned' : undefined}
           onClick={togglePin(tag)}>
           {pinned === tag && (

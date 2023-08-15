@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useSearch } from '../../../peripleo/state';
 import { Section } from './Section';
 import { HistogramConfig, createRenderer } from './Histogram';
 import { SectionPicker } from './SectionPicker';
@@ -19,6 +20,8 @@ interface SectionNavigatorProps {
 export const SectionNavigator = (props: SectionNavigatorProps) => {
 
   const { tei } = props;
+
+  const { search } = useSearch();
 
   const canvas = useRef<HTMLCanvasElement>(null);
 
@@ -51,8 +54,8 @@ export const SectionNavigator = (props: SectionNavigatorProps) => {
 
   useEffect(() => {
     if (renderer)
-      renderer.render(cursor);
-  }, [renderer, cursor]);
+      renderer.render(cursor, search?.args.filters);
+  }, [renderer, cursor, search?.args?.filters]);
 
   useEffect(() => {
     // Put the cursor at the first section in the viewport
