@@ -9,10 +9,14 @@ export default defineConfig(({ command, mode }) => ({
   },
   build: {
     rollupOptions: {
+      input: {
+        app: 'public/index.html',
+      },
       output: {
         manualChunks: {
-          react: ["react"],
-          "react-dom": ["react-dom"],
+          'react': ['react'],
+          'react-dom': ['react-dom'],
+          'maplibre-gl': ['maplibre-gl']
         }
       }
     }
