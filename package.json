@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/chroma-js": "^2.4.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "@types/react-resizable": "^3.0.4",
@@ -23,6 +24,7 @@
     "@radix-ui/react-popover": "^1.0.6",
     "@turf/bbox": "^6.5.0",
     "CETEIcean": "^1.8.0",
+    "chroma-js": "^2.4.2",
     "maplibre-gl": "^3.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

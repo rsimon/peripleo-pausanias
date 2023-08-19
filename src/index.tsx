@@ -28,6 +28,9 @@ import {
 import './peripleo/theme/default/index.css';
 import './peripleo-ext/theme/default/index.css';
 
+// Data layer colors
+const PALETTE = ['#0000ff'];
+
 export const App = () => {
 
   const MAP_STYLE = document.querySelector('meta[name="map.style"]')?.getAttribute('content');
@@ -90,10 +93,11 @@ export const App = () => {
             <LayerSwitcher
               names={Array.from(layers.keys())}>
 
-              {Array.from(layers.keys()).map(name => (
+              {Array.from(layers.keys()).map((name, idx) => (
                 <StaticDataLayer 
                   key={name}
                   id={name}
+                  color={PALETTE[idx % PALETTE.length]}
                   data={layers.get(name)} />
               ))}
             </LayerSwitcher>

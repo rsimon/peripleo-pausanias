@@ -2,12 +2,15 @@ import { useEffect } from 'react';
 import bbox from '@turf/bbox';
 import { Feature, FeatureCollection } from '../../../Types';
 import { useMap } from '../../Map';
+import { pointStyle, fillStyle, strokeStyle } from './styles';
 
 interface StaticDataLayerProps {
 
   id: string;
 
   data?: FeatureCollection;
+
+  color?: string;
 
 }
 
@@ -32,23 +35,30 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
     const pointSourceId = `${props.id}-pt-source`;
     const pointLayerId = `${props.id}-pt`;
 
-    const shapeSourceId = `${props.id}-sh-source`;
-    const shapeLayerId = `${props.id}-sh`;
+    const fillSourceId = `${props.id}-fill-source`;
+    const fillLayerId = `${props.id}-fill`;
+
+    const strokeSourceId = `${props.id}-stroke-source`;
+    const strokeLayerId = `${props.id}-stroke`;
 
     map.addSource(pointSourceId, {
       type: 'geojson',
       data: points
     });
 
-    map.addSource(shapeSourceId, {
+    map.addSource(fillSourceId, {
+      type: 'geojson',
+      data: shapes
+    });
+
+    map.addSource(strokeSourceId, {
       type: 'geojson',
       data: shapes
     });
 
     // @ts-ignore
     map.addLayer({
-      // ...props.style,
-      'type': 'circle',
+      ...pointStyle({ color: props.color }),
       id: pointLayerId,
       source: pointSourceId,
       metadata: {
@@ -56,13 +66,23 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
       }
     });
 
+    // @ts-ignore
     map.addLayer({
-      // ...props.style,
-      'type': 'fill',
-      id: shapeLayerId,
-      source: shapeSourceId,
+      ...fillStyle({ fill: props.color }),
+      id: fillLayerId,
+      source: fillSourceId,
       metadata: {
         interactive: true,
+      }
+    });
+
+    // @ts-ignore
+    map.addLayer({
+      ...strokeStyle({ fill: props.color }),
+      id: strokeLayerId,
+      source: strokeSourceId,
+      metadata: {
+        interactive: false,
       }
     });
 
@@ -71,10 +91,12 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
 
     return () => {
       map.removeLayer(pointLayerId);
-      map.removeLayer(shapeLayerId);
+      map.removeLayer(fillLayerId);
+      map.removeLayer(strokeLayerId);
       
       map.removeSource(pointSourceId);
-      map.removeSource(shapeSourceId);
+      map.removeSource(fillSourceId);
+      map.removeSource(strokeSourceId);
     }
   }, []);
 
