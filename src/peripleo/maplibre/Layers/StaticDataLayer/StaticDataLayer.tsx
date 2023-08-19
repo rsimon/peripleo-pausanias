@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import bbox from '@turf/bbox';
 import { Feature, FeatureCollection } from '../../../Types';
 import { useMap } from '../../Map';
 
@@ -20,11 +21,13 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
   const map = useMap();
 
   useEffect(() => {
+    const geometry = fc(props.data?.features.filter(f => f.geometry));
+
     const points = 
-      fc(props.data?.features.filter(f => f.geometry?.type === 'Point'));
+      fc(geometry.features.filter(f => f.geometry?.type === 'Point'));
 
     const shapes =
-      fc(props.data?.features.filter(f => f.geometry?.type !== 'Point'));
+      fc(geometry.features.filter(f => f.geometry?.type !== 'Point'));
 
     const pointSourceId = `${props.id}-pt-source`;
     const pointLayerId = `${props.id}-pt`;
@@ -62,6 +65,9 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
         interactive: true,
       }
     });
+
+    const [minLon, minLat, maxLon, maxLat] = bbox(geometry);
+    map.fitBounds([[minLon, minLat], [maxLon, maxLat]], { padding: 100 });
 
     return () => {
       map.removeLayer(pointLayerId);

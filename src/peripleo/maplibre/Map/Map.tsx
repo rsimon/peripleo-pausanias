@@ -4,7 +4,6 @@ import { MapContext } from './MapContext';
 import { MapProps } from './MapProps';
 import { PopupContainer } from '../Popup';
 import { SearchStatus, useSearch, useSelectionState, useStore } from '../../state';
-import { Feature } from '../../Types';
 
 import 'maplibre-gl/dist/maplibre-gl.css';
 
