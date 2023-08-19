@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { FeatureCollection } from '../../../Types';
+import { Feature, FeatureCollection } from '../../../Types';
 import { useMap } from '../../Map';
 
 interface StaticDataLayerProps {
@@ -10,11 +10,22 @@ interface StaticDataLayerProps {
 
 }
 
+const fc = (data?: Feature[]) => ({ 
+  type: 'FeatureCollection', 
+  features: data || []
+});
+
 export const StaticDataLayer = (props: StaticDataLayerProps) => {
 
   const map = useMap();
 
   useEffect(() => {
+    const points = 
+      fc(props.data?.features.filter(f => f.geometry.type === 'Point'));
+
+    const shapes =
+      fc(props.data?.features.filter(f => f.geometry.type !== 'Point'));
+
     const sourceId = `${props.id}-source`;
 
     map.addSource(sourceId, {
