@@ -35,23 +35,16 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
     const pointSourceId = `${props.id}-pt-source`;
     const pointLayerId = `${props.id}-pt`;
 
-    const fillSourceId = `${props.id}-fill-source`;
-    const fillLayerId = `${props.id}-fill`;
-
-    const strokeSourceId = `${props.id}-stroke-source`;
-    const strokeLayerId = `${props.id}-stroke`;
+    const shapeSourceId = `${props.id}-shape-source`;
+    const fillLayerId = `${props.id}-shape-fill`;
+    const strokeLayerId = `${props.id}-shape-stroke`;
 
     map.addSource(pointSourceId, {
       type: 'geojson',
       data: points
     });
 
-    map.addSource(fillSourceId, {
-      type: 'geojson',
-      data: shapes
-    });
-
-    map.addSource(strokeSourceId, {
+    map.addSource(shapeSourceId, {
       type: 'geojson',
       data: shapes
     });
@@ -70,7 +63,7 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
     map.addLayer({
       ...fillStyle({ fill: props.color }),
       id: fillLayerId,
-      source: fillSourceId,
+      source: shapeSourceId,
       metadata: {
         interactive: true,
       }
@@ -80,7 +73,7 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
     map.addLayer({
       ...strokeStyle({ fill: props.color }),
       id: strokeLayerId,
-      source: strokeSourceId,
+      source: shapeSourceId,
       metadata: {
         interactive: false,
       }
@@ -95,8 +88,7 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
       map.removeLayer(strokeLayerId);
       
       map.removeSource(pointSourceId);
-      map.removeSource(fillSourceId);
-      map.removeSource(strokeSourceId);
+      map.removeSource(shapeSourceId);
     }
   }, []);
 
