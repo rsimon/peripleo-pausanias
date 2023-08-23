@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { MapMouseEvent, PointLike } from 'maplibre-gl';
+import { ReactNode, useEffect, useState } from 'react';
+import { MapGeoJSONFeature, MapMouseEvent, PointLike } from 'maplibre-gl';
 import bbox from '@turf/bbox';
 import { Feature, FeatureCollection } from '../../../Types';
 import { CLICK_THRESHOLD, useMap } from '../../Map';
@@ -13,6 +13,8 @@ interface StaticDataLayerProps {
 
   color?: string;
 
+  tooltip?(features: MapGeoJSONFeature[]): ReactNode;
+
 }
 
 const fc = (data?: Feature[]) => ({ 
@@ -22,7 +24,11 @@ const fc = (data?: Feature[]) => ({
 
 export const StaticDataLayer = (props: StaticDataLayerProps) => {
 
+  console.log('render');
+
   const map = useMap();
+
+  const [hovered, setHovered] = useState<MapGeoJSONFeature | undefined>(undefined);
 
   const pointSourceId = `${props.id}-pt-source`;
   const pointLayerId = `${props.id}-pt`;
@@ -31,7 +37,7 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
   const fillLayerId = `${props.id}-shape-fill`;
   const strokeLayerId = `${props.id}-shape-stroke`;
 
-  const onMapClicked = (evt: MapMouseEvent) => {
+  const queryFeatures = (evt: MapMouseEvent) => {
     const map = evt.target;
 
     const bbox: [PointLike, PointLike] = [
@@ -39,11 +45,24 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
       [evt.point.x + CLICK_THRESHOLD, evt.point.y + CLICK_THRESHOLD]
     ];
 
-    const features = map.queryRenderedFeatures(bbox)
+    return map.queryRenderedFeatures(bbox)
       // @ts-ignore
       .filter(({ layer }) => layer.id === pointLayerId || layer.id === fillLayerId);
+  }
 
-    console.log('features', features);
+  const onMapClicked = (evt: MapMouseEvent) => {
+    // console.log('features', features);
+  }
+
+  const onMapHover = (evt: MapMouseEvent) => {
+    const features = queryFeatures(evt);
+
+    console.log('hover', Boolean(hovered), features.length);
+
+    if (features.length > 0)
+      setHovered(features[0]);
+    else
+      setHovered(undefined);
   }
 
   useEffect(() => {
@@ -86,14 +105,20 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
       source: shapeSourceId
     });
 
-    map.on('click', onMapClicked);
+    if (props.tooltip) {
+      map.on('click', onMapClicked);
+      map.on('mousemove', onMapHover);
+    }
 
     const [minLon, minLat, maxLon, maxLat] = bbox(geometry);
     map.fitBounds([[minLon, minLat], [maxLon, maxLat]], { padding: 100 });
 
     return () => {
-      map.off('click', onMapClicked);
-      
+      if (props.tooltip) {
+        map.off('click', onMapClicked);
+        map.off('mousemove', onMapHover);
+      }
+
       map.removeLayer(pointLayerId);
       map.removeLayer(fillLayerId);
       map.removeLayer(strokeLayerId);
@@ -101,8 +126,10 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
       map.removeSource(pointSourceId);
       map.removeSource(shapeSourceId);
     }
-  }, []);
+  }, [props.tooltip]);
 
-  return null;
+  return props.tooltip && hovered ? (
+    props.tooltip([hovered])
+  ) : null;
 
 }

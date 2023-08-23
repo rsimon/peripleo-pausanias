@@ -6,7 +6,8 @@ import {
   teiLayerStyle, 
   onSearch, 
   toGeoJSON,
-  PlaceTooltip
+  PlaceTooltip,
+  LayerTooltip
 } from './pausanias';
 import { 
   Peripleo,
@@ -35,8 +36,6 @@ export const App = () => {
 
   const MAP_STYLE = document.querySelector('meta[name="map.style"]')?.getAttribute('content');
 
-  const [tei, setTEI] = useState<Element | undefined>(undefined);
-
   const [places, setPlaces] = useState([]);
 
   const [trace, setTrace] = useState(null);
@@ -57,8 +56,6 @@ export const App = () => {
   }, []);
 
   const onTEILoaded = (tei: Element) => {
-    setTEI(tei);
-
     const placeNames = Array.from(tei.querySelectorAll('tei-body tei-placename'));
     setTrace(importTEITrace('Pausanias', placeNames));
   }
@@ -98,7 +95,8 @@ export const App = () => {
                   key={name}
                   id={name}
                   color={PALETTE[idx % PALETTE.length]}
-                  data={layers.get(name)} />
+                  data={layers.get(name)} 
+                  tooltip={features => <LayerTooltip features={features}/>} />
               ))}
             </LayerSwitcher>
           </Controls>
