@@ -7,7 +7,7 @@ import { SearchStatus, useSearch, useSelectionState, useStore } from '../../stat
 
 import 'maplibre-gl/dist/maplibre-gl.css';
 
-const CLICK_THRESHOLD = 10;
+export const CLICK_THRESHOLD = 10;
 
 export const Map = (props: MapProps) => {
 

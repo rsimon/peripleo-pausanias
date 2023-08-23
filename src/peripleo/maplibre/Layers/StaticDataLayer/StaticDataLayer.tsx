@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
+import { MapMouseEvent, PointLike } from 'maplibre-gl';
 import bbox from '@turf/bbox';
 import { Feature, FeatureCollection } from '../../../Types';
-import { useMap } from '../../Map';
+import { CLICK_THRESHOLD, useMap } from '../../Map';
 import { pointStyle, fillStyle, strokeStyle } from './styles';
 
 interface StaticDataLayerProps {
@@ -23,6 +24,28 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
 
   const map = useMap();
 
+  const pointSourceId = `${props.id}-pt-source`;
+  const pointLayerId = `${props.id}-pt`;
+
+  const shapeSourceId = `${props.id}-shape-source`;
+  const fillLayerId = `${props.id}-shape-fill`;
+  const strokeLayerId = `${props.id}-shape-stroke`;
+
+  const onMapClicked = (evt: MapMouseEvent) => {
+    const map = evt.target;
+
+    const bbox: [PointLike, PointLike] = [
+      [evt.point.x - CLICK_THRESHOLD, evt.point.y - CLICK_THRESHOLD],
+      [evt.point.x + CLICK_THRESHOLD, evt.point.y + CLICK_THRESHOLD]
+    ];
+
+    const features = map.queryRenderedFeatures(bbox)
+      // @ts-ignore
+      .filter(({ layer }) => layer.id === pointLayerId || layer.id === fillLayerId);
+
+    console.log('features', features);
+  }
+
   useEffect(() => {
     const geometry = fc(props.data?.features.filter(f => f.geometry));
 
@@ -31,13 +54,6 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
 
     const shapes =
       fc(geometry.features.filter(f => f.geometry?.type !== 'Point'));
-
-    const pointSourceId = `${props.id}-pt-source`;
-    const pointLayerId = `${props.id}-pt`;
-
-    const shapeSourceId = `${props.id}-shape-source`;
-    const fillLayerId = `${props.id}-shape-fill`;
-    const strokeLayerId = `${props.id}-shape-stroke`;
 
     map.addSource(pointSourceId, {
       type: 'geojson',
@@ -53,36 +69,31 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
     map.addLayer({
       ...pointStyle({ color: props.color }),
       id: pointLayerId,
-      source: pointSourceId,
-      metadata: {
-        interactive: true,
-      }
+      source: pointSourceId
     });
 
     // @ts-ignore
     map.addLayer({
       ...fillStyle({ fill: props.color }),
       id: fillLayerId,
-      source: shapeSourceId,
-      metadata: {
-        interactive: true,
-      }
+      source: shapeSourceId
     });
 
     // @ts-ignore
     map.addLayer({
       ...strokeStyle({ fill: props.color }),
       id: strokeLayerId,
-      source: shapeSourceId,
-      metadata: {
-        interactive: false,
-      }
+      source: shapeSourceId
     });
+
+    map.on('click', onMapClicked);
 
     const [minLon, minLat, maxLon, maxLat] = bbox(geometry);
     map.fitBounds([[minLon, minLat], [maxLon, maxLat]], { padding: 100 });
 
     return () => {
+      map.off('click', onMapClicked);
+      
       map.removeLayer(pointLayerId);
       map.removeLayer(fillLayerId);
       map.removeLayer(strokeLayerId);
