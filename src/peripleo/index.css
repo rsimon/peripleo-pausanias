@@ -3,6 +3,12 @@
   height: 100%;
 }
 
-.p6o-popup-container {
+.p6o-popup-container,
+.p6o-tooltip-container {
   position: absolute;
 }
+
+.p6o-tooltip-container {
+  pointer-events: none;
+}
+

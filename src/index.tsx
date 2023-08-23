@@ -96,7 +96,7 @@ export const App = () => {
                   id={name}
                   color={PALETTE[idx % PALETTE.length]}
                   data={layers.get(name)} 
-                  tooltip={features => <LayerTooltip features={features}/>} />
+                  tooltip={props => <LayerTooltip {...props} />} />
               ))}
             </LayerSwitcher>
           </Controls>

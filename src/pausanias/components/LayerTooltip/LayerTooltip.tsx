@@ -1,16 +1,10 @@
-import { MapGeoJSONFeature } from 'maplibre-gl';
+import { TooltipProps } from '../../../peripleo';
 
 import './LayerTooltip.css';
 
-interface LayerTooltipProps {
+export const LayerTooltip = (props: TooltipProps) => {
 
-  features: MapGeoJSONFeature[];
-
-}
-
-export const LayerTooltip = (props: LayerTooltipProps) => {
-
-  const { title } = props.features[0].properties;
+  const { title } = props.feature.properties;
 
   return (
     <div className="pausanias-layer-tooltip">

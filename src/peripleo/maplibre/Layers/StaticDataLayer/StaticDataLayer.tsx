@@ -4,6 +4,7 @@ import bbox from '@turf/bbox';
 import { Feature, FeatureCollection } from '../../../Types';
 import { CLICK_THRESHOLD, useMap } from '../../Map';
 import { pointStyle, fillStyle, strokeStyle } from './styles';
+import { TooltipContainer, TooltipProps } from '../../Tooltip';
 
 interface StaticDataLayerProps {
 
@@ -13,7 +14,15 @@ interface StaticDataLayerProps {
 
   color?: string;
 
-  tooltip?(features: MapGeoJSONFeature[]): ReactNode;
+  tooltip?(props: TooltipProps): ReactNode;
+
+}
+
+interface Hovered { 
+  
+  event: MapMouseEvent; 
+  
+  feature: MapGeoJSONFeature;
 
 }
 
@@ -24,11 +33,9 @@ const fc = (data?: Feature[]) => ({
 
 export const StaticDataLayer = (props: StaticDataLayerProps) => {
 
-  console.log('render');
-
   const map = useMap();
 
-  const [hovered, setHovered] = useState<MapGeoJSONFeature | undefined>(undefined);
+  const [hovered, setHovered] = useState<Hovered | undefined>(undefined);
 
   const pointSourceId = `${props.id}-pt-source`;
   const pointLayerId = `${props.id}-pt`;
@@ -50,17 +57,11 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
       .filter(({ layer }) => layer.id === pointLayerId || layer.id === fillLayerId);
   }
 
-  const onMapClicked = (evt: MapMouseEvent) => {
-    // console.log('features', features);
-  }
-
-  const onMapHover = (evt: MapMouseEvent) => {
-    const features = queryFeatures(evt);
-
-    console.log('hover', Boolean(hovered), features.length);
+  const onMapHover = (event: MapMouseEvent) => {
+    const features = queryFeatures(event);
 
     if (features.length > 0)
-      setHovered(features[0]);
+      setHovered({ feature: features[0], event });
     else
       setHovered(undefined);
   }
@@ -105,19 +106,15 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
       source: shapeSourceId
     });
 
-    if (props.tooltip) {
-      map.on('click', onMapClicked);
+    if (props.tooltip)
       map.on('mousemove', onMapHover);
-    }
 
     const [minLon, minLat, maxLon, maxLat] = bbox(geometry);
     map.fitBounds([[minLon, minLat], [maxLon, maxLat]], { padding: 100 });
 
     return () => {
-      if (props.tooltip) {
-        map.off('click', onMapClicked);
+      if (props.tooltip)
         map.off('mousemove', onMapHover);
-      }
 
       map.removeLayer(pointLayerId);
       map.removeLayer(fillLayerId);
@@ -129,7 +126,9 @@ export const StaticDataLayer = (props: StaticDataLayerProps) => {
   }, [props.tooltip]);
 
   return props.tooltip && hovered ? (
-    props.tooltip([hovered])
+    <TooltipContainer 
+      {...hovered} 
+      tooltip={props.tooltip} />
   ) : null;
 
 }
