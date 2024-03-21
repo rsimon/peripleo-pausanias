@@ -2,7 +2,7 @@ import csv
 import json
 import pandas as pd
 
-INPUT_FILE = './pleiades-gis-places.csv.gz'
+INPUT_FILE = './data/pleiades-gis-places.csv.gz'
 
 df = pd.read_csv(INPUT_FILE, compression='gzip', quoting=csv.QUOTE_MINIMAL)
 
@@ -28,8 +28,8 @@ def to_feature(row):
 
 geojson = {
   'type': 'FeatureCollection',
-  'features': list([ to_feature(row) for idx, row in df.iterrows() ])
+  'features': [f for f in list([ to_feature(row) for idx, row in df.iterrows() ]) if 'geometry' in f]
 }
 
-with open('pleiades-all-places.json', 'w') as outfile:
+with open('pleiades-all-located-places.json', 'w') as outfile:
   json.dump(geojson, outfile)
