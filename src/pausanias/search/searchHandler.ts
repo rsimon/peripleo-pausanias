@@ -47,7 +47,6 @@ export const onSearch = (
         }) :
 
       visibleReferences;
-        
 
     const byPlace = aggregateByPlace(filteredByTag);
 

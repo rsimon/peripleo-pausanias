@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import * as Popover from '@radix-ui/react-popover';
 import { ArrowRight, BookOpenText } from '@phosphor-icons/react';
 import { Section } from '../Section';
 
 import './SectionPicker.css';
-import { FormEvent } from 'react';
 
 interface SectionPickerProps {
 

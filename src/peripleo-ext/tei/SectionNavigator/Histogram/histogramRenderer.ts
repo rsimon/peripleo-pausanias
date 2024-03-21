@@ -69,7 +69,16 @@ export const createRenderer = (canvas: HTMLCanvasElement, sections: Section[], c
   const filterBucket = (idx: number, tag?: string, placeId?: string) =>
     buckets[idx].reduce((count, section) => {
       const filteredByTag = tag ? 
-        section.placenames.filter(el => el.getAttribute('ana')?.includes(tag)) : 
+        section.placenames.filter(el => { 
+          const tags = (el.getAttribute('ana') || '')
+            .split('#')
+            .map(str => str.toLowerCase().trim())
+            .filter(Boolean);
+
+          const normalizedTag = tag.replace('#', '').toLowerCase().trim();
+
+          return tags.some(t => t === normalizedTag);
+        }) : 
         section.placenames;
 
       const filteredByPlace = placeId ? 
