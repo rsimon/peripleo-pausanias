@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'; 
 import { createRoot } from 'react-dom/client';
 import { TEIView } from './peripleo-ext';
+import { useConfig } from './Config';
 import {
   importTEITrace, 
   teiLayerStyle, 
@@ -28,13 +29,14 @@ import {
 
 import './peripleo/theme/default/index.css';
 import './peripleo-ext/theme/default/index.css';
+import { Feature } from 'maplibre-gl';
 
 // Data layer colors
 const PALETTE = ['#0000ff'];
 
 export const App = () => {
 
-  const MAP_STYLE = document.querySelector('meta[name="map.style"]')?.getAttribute('content');
+  const config = useConfig();
 
   const [places, setPlaces] = useState([]);
 
@@ -45,22 +47,32 @@ export const App = () => {
   const loaded = places.length > 0 && trace;
 
   useEffect(() => {
-    fetch('pleiades-referenced-places.lp.json')
+    if (!config) return;
+
+    fetch(config.gazetteer)
       .then(res => res.json())
       .then(geojson => setPlaces(geojson.features));
 
-    fetch('ascsa-monuments-places.lp.json')
-      .then(res => res.json())
-      .then(geojson => setLayers(map =>
-        new Map(map).set('ASCSA Monuments', geojson as FeatureCollection)))
-  }, []);
+    if (config.layers) {
+      Promise.all(config.layers.map(({ name, url }) =>
+        fetch(url)
+          .then(res => res.json())
+          .then(data => ({ name, data })))
+      ).then(layers => {
+        const entries: [string, FeatureCollection][] = 
+          layers.map(({ name, data }) => ([name, data as FeatureCollection ]));
+
+        setLayers(new Map(entries));
+      });
+    }
+  }, [config]);
 
   const onTEILoaded = (tei: Element) => {
     const placeNames = Array.from(tei.querySelectorAll('tei-body tei-placename'));
     setTrace(importTEITrace('Pausanias', placeNames));
   }
 
-  return (
+  return config && (
     <Peripleo>
       <BrowserStore
         places={loaded ? places : []}
@@ -69,7 +81,7 @@ export const App = () => {
         <SearchHandler onSearch={onSearch} />
 
         <MapLibreMap 
-          style={MAP_STYLE}
+          style={config.map}
           popup={props => (
             <PlaceTooltip {...props} />
           )}>
@@ -105,8 +117,8 @@ export const App = () => {
         <DraggablePanel
           width={450}>
           <TEIView
-            title="Pausanias Book 1"
-            src="pausanias-book1.tei.xml" 
+            title={config.tei.name}
+            src={config.tei.url}
             onLoad={onTEILoaded} />
         </DraggablePanel>
       </BrowserStore>
