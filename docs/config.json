@@ -1,0 +1,12 @@
+{
+  "map": "https://api.maptiler.com/maps/basic-v2-light/style.json?key=RFavxpVJ82EHyrN2kxsF",
+  "gazetteer": "pleiades-all-located-places.lp.json",
+  "tei": {
+    "name": "Pausanias Book 1",
+    "url": "pausanias-book1.tei.xml"
+  },
+  "layers": [{
+    "name": "ASCSA Monuments",
+    "url": "ascsa-monuments-places.lp.json"
+  }]
+}
